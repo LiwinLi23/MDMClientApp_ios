@@ -1,0 +1,176 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <title>tmbSocial（分享接口）</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+                <meta http-equiv="Access-Control-Allow-Origin" content="*">
+                    <style type="text/css">
+                        div,input {
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                        }
+                    </style>
+                    <script>
+                        // 文字分享内容
+                        var content = '{"title":"分享标题", "content":"这里是融创天下成都分公司"}';
+                        // 图片分享内容
+                        var img = '{"title":"男人的梦想", "url":"http://h.hiphotos.baidu.com/image/pic/item/6f061d950a7b02087cb713e060d9f2d3572cc8b0.jpg"}';
+                        // 音乐分享内容
+                        var music = '{"title":"天籁之音", "url":"http://yinyueshiting.baidu.com/data2/music/42783539/877578151200128.mp3?xcode=6f3ce696088ecdaf1edef667357ca0a04dee40f9ffcb385a","author":"阿杜","thumbUrl":"http://h.hiphotos.baidu.com/image/pic/item/6f061d950a7b02087cb713e060d9f2d3572cc8b0.jpg"}';
+                        // 视频分享内容
+                        var video = '{"title":"好看的视频", "url":"http://120.197.98.54:8088/fz/das_auto.mp4","thumbUrl":"http://h.hiphotos.baidu.com/image/pic/item/6f061d950a7b02087cb713e060d9f2d3572cc8b0.jpg"}';
+                        
+                        // 分享内容类型
+                        var contentType = 1;
+                        // 分享内容
+                        var shareContent = content;
+                        // 获取分享内容类型
+                        function setContentType() {
+                            var type = document.getElementById("contentType").value;
+                            contentType = Number(type);
+                            switch (contentType) {
+                                case 1:
+                                shareContent = content;
+                                break;
+                                case 2:
+                                shareContent = img;
+                                break;
+                                case 3:
+                                shareContent = music;
+                                break;
+                                case 4:
+                                shareContent = video;
+                                break;
+                                default:
+                                shareContent = content;
+                                break;
+                            }
+                        }
+                    function cbopenShare(str){
+                        tmbWindow.alert(str);
+                    }
+                    // 分享平台类型
+                    var platformType = 1;
+                    // 获取分享平台
+                    function setSharePlatform() {
+                        var type = document.getElementById("platformType").value;
+                        platformType = Number(type);
+                    }
+                    
+                    // 打开默认的分享面板
+                    function openSharePanel() {
+                        //参数含义：
+                        // 分享内容类型
+                        // 分享内容JSON字符窜
+                        // 0-不强制用户登录，1-强制用户登录
+                        tmbSocial.cbopenShare = cbopenShare;
+                        tmbSocial.openPanel(contentType, shareContent, 0);
+                        
+                    }
+                    tmbSocial.cblogin = function(str){
+                        tmbWindow.alert(str);
+                    };
+                    function dismissSharePanel(){
+                        tmbSocial.dismissPanel();
+                    }
+                    //登录回调
+                    function cblogin(p1,p1,p3){
+                        tmbWindow.alert(p3);
+                    }
+                    //新浪微博登陆
+                    function opensinaLogin(){
+                        tmbSocial.cblogin = cblogin;
+                        tmbSocial.openSinaLogin();
+                    }
+                    //qq登录
+                    function openqqLogin(){
+                        tmbSocial.cblogin = cblogin;
+                        tmbSocial.openQQLogin();
+                    }
+                    //微信登录
+                    function openWeixinLogin(){
+                        tmbSocial.cblogin = cblogin;
+                        //去官网申请appid和appSecret
+                        var appid="wxb1af0ad2713834c2";
+                        var appSecret="2c4446f46124ceef569403aa3e9f939d";
+                        tmbSocial.openWeixinLogin(appid,appSecret);
+                    }
+                    //qq空间登录
+                    function openQzoneLogin(){
+                        tmbSocial.cblogin = cblogin;
+                        tmbSocial.openQzoneLogin();
+                    }
+                    //腾讯微博登陆
+                    function openTwbLogin(){
+                        tmbSocial.cblogin = cblogin;
+                        tmbSocial.openTwbLogin();
+                    }
+                    //直接分享，MDM1.3.3兼容
+                    // tmbWeibo这个对象从MDM2.0开始不再更新
+                    function directShareOld() {
+                        tmbWeibo.weiboShare(platformType, "我是分享的文字内容");
+                    }
+                    
+                    //直接分享，MDM2.0新API
+                    //如果用户还没有授权目标平台，则需要先进行授权，授权完成后则直接分享， 不弹出内容编辑页面， 此接口适合开发者自定义UI
+                    function directShare() {
+                        // 第一个参数为分享平台类型，1-新浪微博，2-腾讯微博，3-短信，4-邮件，5-微信，6-朋友圈，7-QQ，8-QQ空间
+                        // 第二个参数为分享内容类型，1-文字，2-图片，3-音乐，4-视频
+                        // 第三个参数为分享内容JSON字符窜
+                        tmbSocial.directShare(platformType, contentType, shareContent);
+                    }
+                    // 同直接分享，只是分享前会调出编辑界面，微信，朋友圈不能编辑，直接弹出客户端分享
+                    function postShare(){
+                        tmbSocial.postShare(platformType, contentType, shareContent);
+                    }
+                    </script>
+                    </head>
+    <body>
+        <div style="margin-top: 10px">
+            <a href="index.html">GoBack</a>
+        </div>
+        <h2>tmbSocial（分享接口）</h2>
+        <div>
+            分享平台类型： <select id="platformType" onchange="setSharePlatform();">
+                <option value="1">新浪微博</option>
+                <option value="2">腾讯微博</option>
+                <option value="3">短信</option>
+                <option value="4">邮件</option>
+                <option value="5">微信</option>
+                <option value="6">朋友圈</option>
+                <option value="7">QQ</option>
+                <option value="8">QQ空间</option>
+            </select> (数字1-8)
+        </div>
+        <div>
+            分享内容类型： <select id="contentType" onchange="setContentType();">
+                <option value="1">文字</option>
+                <option value="2">图片</option>
+                <option value="3">音乐</option>
+                <option value="4">视频</option>
+            </select> (数字1-4)
+        </div>
+        <input type="button" value="打开分享面板" onclick="openSharePanel();" />
+        <br />
+        <input type="button" value="关闭分享面板" onclick="dismissSharePanel();" />
+        <br />
+        <input type="button" value="新浪登录" onclick="opensinaLogin();" />
+        <br />
+        <input type="button" value="qq登录" onclick="openqqLogin();" />
+        <br />
+        <input type="button" value="微信登录" onclick="openWeixinLogin();" />
+        <br />
+        <input type="button" value="QQ空间登录" onclick="openQzoneLogin();" />
+        <br />
+        <input type="button" value="腾讯微博登录" onclick="openTwbLogin();" />
+        <br />
+        <input type="button" value="直接分享（1.3.3旧API兼容）" onclick="directShareOld();" />
+        <br />
+        <input type="button" value="直接分享（MDM2.0新API）" onclick="directShare();" />
+        <br />
+        <input type="button" value="可编辑分享（MDM2.0新API）" onclick="postShare();" />
+        <br />
+    </body>
+</html>
+

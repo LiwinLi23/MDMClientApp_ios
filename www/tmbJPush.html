@@ -1,0 +1,41 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<title>百度云推送（tmbBaiduPush）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+	// 获取注册ID
+	function getJPushRegistrationID() {
+		// 为确保推送服务正常使用调用这个方法绑定服务
+		tmbJPush.getRegistrationID();
+
+	}
+window.tmbOnload = function(){
+	// 获取注册ID回调
+	tmbJPush.cbGetRegistrationID = function(opID, dataType, data) {
+		tmbWindow.alert(data);
+	}
+}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>极光推送（tmbJPush）</h2>
+	<div align="center">
+		<input type="button" value="获取注册ID"
+			style="margin-top: 15px; font-size: 120%;"
+			onclick="getJPushRegistrationID();" />
+	</div>
+</body>
+</html>

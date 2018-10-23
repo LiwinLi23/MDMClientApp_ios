@@ -1,0 +1,81 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>MDM API Demo</title>
+    </head>
+    <script type="text/javascript">
+        
+        var roomListInfo;
+        
+        function doLogin(){
+            var serverIP = document.getElementById('serverIP').value;
+            var userName  = document.getElementById('userName').value;
+            var passWord  = document.getElementById('passWord').value;
+            
+            tmbVideoMeeting.login(serverIP,userName,passWord);
+            
+            tmbVideoMeeting.cbLogin = function(opID,dataType,data){
+                if(dataType == 2 && data != 0){
+                    var msg;
+                    
+                    if(data == 2)
+                    msg = '用户名错误';
+                    else if( data == 3)
+                    msg = '密码错误';
+                    else
+                    msg = '登录失败';
+                    
+                    tmbWindow.alert(msg);
+                }
+            }
+        }
+    
+    function enter(num){
+
+        tmbVideoMeeting.enterRoom(roomListInfo[num].nodeId, roomListInfo[num].roomId);
+    }
+    
+    window.tmbOnload = function() {
+        
+        tmbVideoMeeting.cbRoomList = function( opID,dataType,data ) {
+            
+            if(data != 0){//data为JSON格式，返回所有房间信息
+                
+                var html = "</p><label>房间列表</label></br>";
+
+                roomListInfo = data;
+                
+                for(var num in roomListInfo){
+
+                    html += "<input type='button' value="+roomListInfo[num].roomName+" onclick='enter("+num+");' style='margin-top: 15px;font-size: 120%;' /></br>";
+                }
+                document.getElementById('room').innerHTML = html;
+            }
+        }
+	}
+    </script>
+    
+    <body scroll="no" id="docs" style="margin-top:20px">
+        <div style="margin-top:10px">
+            <a href="index.html">GoBack</a>
+        </div>
+        <h2>视频会议（tmbVideoMeeting）</h2>
+        
+        <div>
+            <label>服务器地址:</label>
+            <input type="text" id="serverIP" value="112.124.110.177">
+                </div>
+        <div>
+            <label>用&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;名:</label>
+            <input type="text" id="userName" value="zhanghua">
+                </div>
+        <div>
+            <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+            <input type="text" id="passWord" value="1234">
+                </div>
+        <div align="center">
+            <input type="button" value="登录视频会议" style="margin-top: 15px;font-size: 120%;" onclick="doLogin();" />
+        </div>
+        <div align="center" id="room"></div>
+    </body>
+</html>

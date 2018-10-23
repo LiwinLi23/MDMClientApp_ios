@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>index</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<script>
+/*
+    window.tmb={
+        queue:{commands:[],timer:null}
+    };
+    tmb.exec=function(){
+        tmb.queue.commands.push(arguments);
+        if(tmb.queue.timer==null){
+            tmb.queue.timer=setInterval(tmb.runCommand,10)
+        }
+    };
+    tmb.runCommand=function(){
+        var arguments=tmb.queue.commands[0];
+        if(tmb.queue.commands.length==0){
+            clearInterval(tmb.queue.timer);
+            tmb.queue.timer=null
+        };
+        document.location='zhangcheng://'+arguments[0]
+    };
+    var mdmand='&';
+    function mdmParam(a){
+        var l=a.length;
+        var t='';
+        if(l>0){
+            t+='?';
+            for(var i=0;i<l;i++){
+                t+=encodeURIComponent(a[i]);
+                if(i+1==l){
+                    return t
+                };
+                t+=mdmand
+            }
+        };
+        return t
+    };
+
+    window.tmbLocation={};
+    tmbLocation.openLocation=function(){
+        tmb.exec('tmbLocation.openLocation/'+mdmParam(arguments))
+    };
+    tmbLocation.getAddress=function(){
+        tmb.exec('tmbLocation.getAddress/'+mdmParam(arguments))
+    };
+    tmbLocation.closeLocation=function(){
+        tmb.exec('tmbLocation.closeLocation/'+mdmParam(arguments))
+    };
+*/
+
+
+
+
+
+
+
+
+
+
+	window.tmbOnload = function() {
+		var vl = document.getElementById("vl");
+		vl.innerHTML = localStorage.getItem("ls");
+	}
+
+	var url = "num3.html";
+	function openNext() {
+		tmbWindow.open("num3", "0", url, "1", "", "", "7", "300");
+	}
+
+	function goback() {
+//		tmbWindow.back();
+        tmbWindow.goBack();
+	}
+
+	var url1 = "errorPage.html";
+
+	function openSlibing() {
+		var width = window.screen.width;
+		var height = window.screen.height;
+		tmbWindow.openSlibing("1", "0", url1, "", "", height / 5);
+		tmbWindow.openSlibing("2", "0", url1, "", "", height / 5);
+	}
+</script>
+</head>
+<body style="background: green">
+	<h2>这是跳转后的页面1</h2>
+	<font>获取到的localStorage值：</font>
+	<div id="vl"></div>
+	<br />
+	<input type="button" value="打开下一个页面" onclick="openNext();" />
+	<br />
+	<input type="button" value="回到上一个窗口" onclick="goback();" />
+	<br />
+	<input type="button" value="打开三窗口" onclick="openSlibing();" />
+    <br />
+</body>
+</html>

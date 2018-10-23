@@ -1,0 +1,82 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>3D全景操作（tmb3D）</title>
+<style type="text/css">
+div {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	//全景服务器访问地址
+	var qj = "http://183.62.210.173:8090";
+	//获取打开全景展示图JSON的url地址
+	var enName = "waijing1";
+	var url = qj + "/quanjing/content/getfullview/" + enName;
+	//从服务器获取JSON的代码省略...
+	//全景访问json字符窜
+	var json = '{"type":"1","imgPath":"http://183.62.210.173:8090/image/waijing1/waijing1/waijing1.jpg","theta":0.0,"alpha":0.0,'
+			+ '"hotspots":['
+			+ '{"id":1741,"alpha":11.7,"theta":40.69,"imgUrlSelected":"http://183.62.210.173:8090/quanjing/image/hotpoint_25.gif",'
+			+ '"objType":"1","channel":"167","hotPicId":"25"},'
+			+ '{"id":1731,"alpha":8.0,"theta":96.05,"imgUrlSelected":"http://183.62.210.173:8090/quanjing/image/hotpoint_25.gif",'
+			+ '"objType":"1","channel":"165","hotPicId":"25"},'
+			+ '{"id":1760,"alpha":-1.79,"theta":-17.73,"imgUrlSelected":"http://183.62.210.173:8090/quanjing/image/hotpoint_1.png",'
+			+ '"objType":"0","channel":null,"hotPicId":"1"},'
+			+ '{"id":1750,"alpha":-7.57,"theta":172.47,"imgUrlSelected":"http://183.62.210.173:8090/quanjing/image/hotpoint_1.png",'
+			+ '"objType":"0","channel":null,"hotPicId":"1"}]}';
+	// 展示3D全景图
+	function show() {
+		tmb3D.panoramaShow(json);
+	}
+	//热点点击
+	window.tmbOnload = function() {
+		tmb3D.cbSpotClicked = function(spotId) {
+			// 由于界面跳转到了全景展示Activity，所以需要返回本界面才能看到alert弹出的结果
+			tmbWindow.alert("热点id:" + spotId);
+			var len = spotId.length;
+			// 目标类型（0：全景，1：视频，2：网址）
+			// 全景：点击之后展示另外一张全景图
+			// 视频：点击之后接入视频显示
+			// 网址：点击之后加载网址
+			var objectType = spotId.charAt(len - 1);
+			// 目标伪id
+			var wid = spotId.substring(0, len - 1);
+			//从服务器获取JSON的url
+			var url = qj + "/quanjing/content/getfullviewcontent/" + wid + "/"
+					+ objectType;
+			//从服务器获取JSON的代码省略...
+			// 点击热点为全景
+			//if (objectType == "0") {
+			//	var json = JSON.stringify(data);
+			//	tmb3D.panoramaShow(json);
+			//} 
+			// 点击热点为视频
+			//else if (objectType == "1") {
+			//	var playUrl = data.url;
+			//	if (playUrl != null && playUrl != "") {
+			//		tmbPlayer.play(playUrl);
+			//	} else {
+			//		openTip("视频接入地址不存在！");
+			//	}
+			//} 
+			// 点击热点为网址
+			//else if (objectType == "2") {
+
+			//}
+		}
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div>
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>3D全景操作（tmb3D）</h2>
+	<div>
+		<input type="button" value="查看全景图" onclick="show();" />
+	</div>
+</body>
+</html>

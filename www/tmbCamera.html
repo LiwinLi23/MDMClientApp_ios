@@ -1,0 +1,60 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MDM API Demo</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	var IsAndriod = true;
+
+	function callback(opId, dataType, data) {
+		if (0 == dataType) {
+			tmbWindow.alert("照片路径：" + data);
+		}
+	}
+
+	function photoSuccess() {
+		if (IsAndriod) {
+			tmbWindow.alert("拍照成功");
+		} else {
+			tmbWindow.alert("取消拍照");
+		}
+	}
+
+	function platformSuccess(opId, dataType, data) {
+
+		if (0 == dataType && 0 == data) {
+			IsAndriod = false;
+		} else if (0 == dataType && 1 == data) {
+			IsAndriod = true;
+		}
+	}
+
+	//注册回调函数
+	window.tmbOnload = function() {
+		//获取平台信息
+		tmbWidgetOne.getPlatform();
+		tmbWidgetOne.cbGetPlatform = platformSuccess;
+
+		tmbCamera.cbOpen = callback;
+
+		//ios 系统中，此函数是用来监测拍照时是否按了cancel按钮，如果按了cancel，则会调用此函数。
+		tmbCamera.cbHandleResult = photoSuccess;
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>相机功能（tmbCamera）</h2>
+	<div>
+		<input type="button" value="启动相机" onclick="tmbCamera.open();" />
+	</div>
+</body>
+</html>

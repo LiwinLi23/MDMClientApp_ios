@@ -1,0 +1,97 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片浏览（tmbImageBrowser）</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	var inImgPath = null;
+
+	// 打开图片浏览器浏览图片
+	function browerImages() {
+		var urlarr = [ "http://www.iyi8.com/uploadfile/2014/1108/20141108121609347.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/1108/20141108121609121.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/1108/20141108121610817.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0411/20140411113702869.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0411/20140411113703151.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0421/20140421112114650.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0421/20140421112115865.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0430/20140430030301584.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0220/20140220082023749.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0212/20140212101052665.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0129/20140129115648769.jpg",
+                      "http://www.iyi8.com/uploadfile/2014/0410/20140410113031824.jpg",
+                      "http://pic11.nipic.com/20101112/3704874_104053024000_2.jpg",
+                      "http://pic56.nipic.com/file/20141216/10732033_132439024000_2.jpg",
+                      "http://pic57.nipic.com/file/20141228/7577347_233709955001_2.jpg",
+                      "http://pic57.nipic.com/file/20141228/7577347_233709955002_2.jpg",
+                      "http://pic54.nipic.com/file/20141130/7577347_001746502000_2.jpg",
+                      "http://pic54.nipic.com/file/20141107/19721212_191937752000_2.jpg"];
+		tmbImageBrowser.open(urlarr, 3, 1);
+	}
+	// 打开图片浏览器回调
+	function callback(opId, dataType, data) {
+		if (dataType == 0) {
+			document.getElementById('piccs').innerHTML = data;
+			inImgPath = data;
+            tmbImageBrowser.imageToBase64(inImgPath);
+		}
+	}
+	// 保存图片到系统相册回调
+	function saveSuccess(opId, dataType, data) {
+
+        if(data == 0)
+            tmbWindow.alert("IOS保存到相册失败");
+        else if(data == 1)
+            tmbWindow.alert("IOS保存到相册成功");
+        else
+            document.getElementById('picc').innerHTML = data;
+	}
+	// 保存图片到系统相册中
+	function save() {
+		if (null == inImgPath) {
+			alert("请先选择图片");
+			tmbImageBrowser.pick();
+		}
+		tmbImageBrowser.save(inImgPath);
+	}
+
+// 打开图片浏览器回调
+function cbReview(opId, dataType, data) {
+    if (dataType == 0) {
+        document.getElementById("previewimg").src = data;
+    }
+}
+	window.tmbOnload = function() {
+		tmbImageBrowser.cbPick = callback;
+		tmbImageBrowser.cbSave = saveSuccess;
+        tmbImageBrowser.cbImageToBase64 = cbReview;
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>图片浏览（tmbImageBrowser）</h2>
+	<div>
+		<input type="button" value="打开图片" onclick="browerImages()" />
+	</div>
+	<div>
+        <img id="previewimg" style="width:160px;height:240px;" />
+		<input type="button" value="打开系统图片库" onclick="tmbImageBrowser.pick()" />
+	</div>
+	<span>图片路径</span>
+	<em id="piccs"></em>
+	<div>
+		<input type="button" value="保存图片" onclick="save();" />
+	</div>
+	<span>保存到系统相册的图片路径</span>
+	<em id="picc"></em>
+</body>
+</html>

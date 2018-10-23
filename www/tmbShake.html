@@ -1,0 +1,42 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>设备摇晃检测（tmbShake）</title>
+<style type="text/css">
+div {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	function shark() {
+
+		tmbShake.shakeCallBack = function(retCode) {
+			if (retCode == 1) {
+				alert("获取到设备的摇晃检测， retCode值为: " + retCode);
+			} else if (retCode == 0) {
+				alert("设备不支持摇晃检测功能");
+			}
+		}
+		//启动摇晃检测
+		tmbShake.startShake();
+
+		//如果页面返回，需要停止摇晃检测（必须）
+		//tmbShake.stopShake();
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html" onclick="tmbShake.stopShake();">GoBack</a>
+	</div>
+	<h2>设备摇晃检测（tmbShake）</h2>
+	<div>
+		<input type="button" value="启动摇一摇" onclick="shark();">
+	</div>
+	<div>
+		<input type="button" value="关闭摇一摇" onclick="tmbShake.stopShake();">
+	</div>
+</body>
+</html>

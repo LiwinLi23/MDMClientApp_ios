@@ -1,0 +1,77 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<title>微信快捷支付（tmbWepay）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+    function GetRandomNum(Min,Max) {
+        var Range = Max - Min;
+        var Rand = Math.random();
+        return(Min + Math.round(Rand * Range));
+    }
+    function getTradeNo(len) {
+    　　len = len || 32;
+    　　var $chars = '0123456789ABCDEFGHJKMNOPQRSTUVWXYZ';
+    　　var maxPos = $chars.length;
+    　　var pwd = '';
+    　　for (i = 0; i < len; i++) {
+        　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        　　}
+    　　return pwd;
+    }
+	var userId = "";
+    var tradeNo = ""
+    //登陆回调
+    function cbLogin(data) {
+        tmbWindow.alert("登陆完成:" + data);
+    }
+    //支付回调
+    function cbPay(data) {
+        tmbWindow.alert("支付完成:" + data);
+    }
+	// 登录
+	function login() {
+        tmbWePay.onResult = cbLogin;
+		tmbWePay.login(userId);
+	}
+
+	// 支付
+	function pay() {
+        tradeNo = getTradeNo(8);
+        var orderJson = '{"totalFee" : "1", "tradeNo" : "'+tradeNo+'","subject" : "山寨苹果6","body" : "山寨的苹果6手机","notifyUrl" : "http://www.xxx.com","payTimeout" : "15m","isSandMode" : "0","showUrl" : "http://TMDM.temobi.com"}';
+        tmbWePay.onResult = cbPay;
+		tmbWePay.pay(orderJson);
+	}
+    var secretkeyJson = '{"WepayKey" : "L8LrMqqeGRxST5reouB0K66CaYAWpqhAVsq7ggKkxHCOastWksvuX1uvmvQclxaHoYd3ElNBrNO2DHnnzgfVG9Qs473M3DTOZug5er46FhuGofumV8H2FVR9qkjSlC5K", "PartnerKey" : "8934e7d15453e97507ef794cf7b0519d","PartnerID" : "1900000109"}';
+    function setWepaySecretKey() {
+        tmbWePay.setWepaySecretKey(secretkeyJson);
+    }
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+    <div style="margin-top: 10px">
+        <a href="index.html">GoBack</a>
+    </div>
+	<h2>微信快捷支付（tmbWePay）</h2>
+    
+	<div>
+		<input type="button" value="微信权限登录" onclick="login();" />
+	</div>
+	<div>
+		<input type="button" value="微信支付" onclick="pay();" />
+	</div>
+    <div>
+        <input type="button" value="设置支付密钥" onclick="setWepaySecretKey();" />
+    </div>
+	<br>
+
+</body>
+</html>

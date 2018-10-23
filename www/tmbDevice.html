@@ -1,0 +1,213 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>设备固件状态和信息（tmbDevice）</title>
+<style type="text/css">
+div,input,span {
+	font-size: 100%
+}
+</style>
+</head>
+<script type="text/javascript">
+window.tmbOnload = function(){  
+    tmbDevice.cbGetInfo=function(opCode,dataType,data){
+        var device = eval('('+data+')');
+        var cpuFrequency=device.cpu;
+        if(cpuFrequency!=null&&cpuFrequency.length>0){
+            document.getElementById('cpuinfo').innerHTML = cpuFrequency;
+        }
+        var osVersion=device.os;
+        if(osVersion!=null&&osVersion.length>0){　
+            document.getElementById('osinfo').innerHTML = osVersion;
+        }
+        var manufacturer=device.manufacturer;
+        if(manufacturer!=null&&manufacturer.length>0){
+            document.getElementById('manufacturer').innerHTML = manufacturer;
+        }
+        var keyboard= device.keyboard;
+        if(keyboard!=null&&keyboard.length>0){
+            document.getElementById('keyboard').innerHTML = keyboard;
+        }
+        var blueTooth= device.blueTooth;
+        if(blueTooth!=null&&blueTooth.length>0){
+            document.getElementById('blueTooth').innerHTML = blueTooth;
+        }
+        var wifi= device.wifi;
+        if(wifi!=null&&wifi.length>0){
+            document.getElementById('wifi').innerHTML = wifi;
+        }
+        var camera= device.camera;
+        if(camera!=null&&camera.length>0){
+            document.getElementById('camera').innerHTML = camera;
+        }
+        var gps= device.gps;
+        if(gps!=null&&gps.length>0){
+            document.getElementById('gps').innerHTML = gps;
+        }
+        var gprs= device.gprs;
+        if(gprs!=null&&gprs.length>0){
+            document.getElementById('gprs').innerHTML = gprs;
+        }
+        var touch= device.touch;
+        if(touch!=null&&touch.length>0){
+            document.getElementById('touch').innerHTML = touch;
+        }
+        var imei= device.imei;
+        if(imei!=null&&imei.length>0){
+            document.getElementById('imei').innerHTML = imei;
+        }
+        var deviceToken= device.deviceToken;
+        if(deviceToken!=null&&deviceToken.length>0){
+            document.getElementById('deviceToken').innerHTML = deviceToken;
+        }
+        var deviceType= device.deviceType;
+        if(deviceType!=null&&deviceType.length>0){
+            document.getElementById('deviceType').innerHTML = deviceType;
+        }
+        var connectStatus= device.connectStatus;
+        if(connectStatus!=null&&connectStatus.length>0){
+            document.getElementById('connectStatus').innerHTML = connectStatus;
+        }
+        var restDiskSize= device.restDiskSize;
+        if(restDiskSize!=null&&restDiskSize.length>0){
+            document.getElementById('restDiskSize').innerHTML = restDiskSize;
+        }
+        var version= device.version;
+        if(version!=null&&version.length>0){
+            document.getElementById('version').innerHTML = version;
+        }
+        var width= device.width;
+        if(width!=null&&width.length>0){
+            document.getElementById('width').innerHTML = width;
+        }
+        var height= device.height;
+        if(height!=null&&height.length>0){
+            document.getElementById('height').innerHTML = height;
+        }
+        var simSerialNum= device.simSerialNum;
+        if(simSerialNum!=null&&simSerialNum.length>0){
+            document.getElementById('simSerialNum').innerHTML = simSerialNum;
+        }
+        var versionName= device.versionName;
+        if(versionName!=null&&versionName.length>0){
+            document.getElementById('versionName').innerHTML = versionName;
+        }
+        var c_id= device.c_id;
+        if(c_id!=null&&c_id.length>0){
+            document.getElementById('c_id').innerHTML = c_id;
+        }
+    }
+}
+//让设备震动指定时间，单位为毫秒
+function vibrate(){
+	var milliseconds = document.getElementById("milliseconds").value;
+	tmbWindow.alert(milliseconds+"毫秒");
+    tmbDevice.vibrate(milliseconds);
+}
+//取消震动
+function cancelVibrate(){
+        tmbDevice.cancelVibrate();
+}
+</script>
+<body scroll="yes" id="docs" style="margin-top:20px">
+	<div>
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>设备固件状态和信息（tmbDevice）</h2>
+	<div>
+        <input type="text"  value="20000" id="milliseconds" />
+    </div>
+    </br>
+    <div>
+        <input type="button" value="屏幕常亮" onclick="tmbDevice.idleTimerDisabled(1);" />
+
+        <input type="button" value="屏保模式" onclick="tmbDevice.idleTimerDisabled(0);" />
+    </div>
+    </br>
+	<div>
+        <input type="button" value="启动震动器" onclick="vibrate();" />
+
+        <input type="button" value="关闭震动器" onclick="cancelVibrate();" />
+    </div>
+    </br>
+	<span>1.获取CPU信息</span>
+	<input type="button" value="CPU信息"
+		onmousedown="tmbDevice.getInfo('0');">
+	<div id="cpuinfo" style="height: 20px"></div>
+	<span>2.获取系统版本</span>
+	<input type="button" value="系统版本" onmousedown="tmbDevice.getInfo('1');">
+	<div id="osinfo" style="height: 20px"></div>
+	<span>3.获取厂商信息</span>
+	<input type="button" value="厂商信息" onmousedown="tmbDevice.getInfo('2');">
+	<div id="manufacturer" style="height: 20px"></div>
+	<span>4.是否支持键盘</span>
+	<input type="button" value="键盘信息" onmousedown="tmbDevice.getInfo('3');">
+	<div id="keyboard" style="height: 20px"></div>
+	<span>5.是否支持蓝牙</span>
+	<input type="button" value="蓝牙信息" onmousedown="tmbDevice.getInfo('4');">
+	<div id="blueTooth" style="height: 20px"></div>
+	<span>6.是否支持WIFI</span>
+	<input type="button" value="WIFI信息"
+		onmousedown="tmbDevice.getInfo('5');">
+	<div id="wifi" style="height: 20px"></div>
+	<span>7.是否支持摄像头</span>
+	<input type="button" value="摄像头信息"
+		onmousedown="tmbDevice.getInfo('6');">
+	<div id="camera" style="height: 20px"></div>
+	<span>8.是否支持GPS</span>
+	<input type="button" value="GPS信息"
+		onmousedown="tmbDevice.getInfo('7');">
+	<div id="gps" style="height: 20px"></div>
+	<span>9.是否支持GPRS</span>
+	<input type="button" value="GPRS信息"
+		onmousedown="tmbDevice.getInfo('8');">
+	<div id="gprs" style="height: 20px"></div>
+	<span>10.是否支持触屏</span>
+	<input type="button" value="触屏信息" onmousedown="tmbDevice.getInfo('9');">
+	<div id="touch" style="height: 20px"></div>
+	<span>11.IMEI</span>
+	<input type="button" value="IMEI"
+		onmousedown="tmbDevice.getInfo('10');">
+	<div id="imei" style="height: 20px"></div>
+	<span>12.推送服务器设备令牌</span>
+	<input type="button" value="设备令牌"
+		onmousedown="tmbDevice.getInfo('11');">
+	<div id="deviceToken" style="height: 20px"></div>
+	<span>13.设备类型</span>
+	<input type="button" value="设备类型"
+		onmousedown="tmbDevice.getInfo('12');">
+	<div id="deviceType" style="height: 20px"></div>
+	<span>14.联网方式</span>
+	<input type="button" value="联网方式"
+		onmousedown="tmbDevice.getInfo('13');">
+	<div id="connectStatus" style="height: 20px"></div>
+	<span>15.设备存储剩余空间</span>
+	<input type="button" value="设备存储剩余空间"
+		onmousedown="tmbDevice.getInfo('14');">
+	<div id="restDiskSize" style="height: 20px"></div>
+	<span>16.内部版本号</span>
+	<input type="button" value="内部版本号"
+		onmousedown="tmbDevice.getInfo('15');">
+	<div id="version" style="height: 20px"></div>
+	<span>17.分辨率宽度</span>
+	<input type="button" value="分辨率宽度"
+		onmousedown="tmbDevice.getInfo('16');">
+	<div id="width" style="height: 20px"></div>
+	<span>18.分辨率高度</span>
+	<input type="button" value="分辨率高度"
+		onmousedown="tmbDevice.getInfo('17');">
+	<div id="height" style="height: 20px"></div>
+	<span>19.SIM卡序列号</span>
+	<input type="button" value="SIM卡序列号"
+		onmousedown="tmbDevice.getInfo('18');">
+	<div id="simSerialNum" style="height: 20px"></div>
+	<span>20.外部版本号</span>
+	<input type="button" value="外部版本号"
+		onmousedown="tmbDevice.getInfo('19');">
+	<div id="versionName" style="height: 20px"></div>
+	<span>21.渠道ID</span>
+	<input type="button" value="渠道ID"
+		onmousedown="tmbDevice.getInfo('20');">
+	<div id="c_id" style="height: 20px"></div>
+</body>
+</html>

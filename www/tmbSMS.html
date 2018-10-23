@@ -1,0 +1,50 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>MDM API Demo</title>
+    </head>
+    <script type="text/javascript">
+        
+        
+        function openSMS(){
+            var phoneNum = document.getElementById('telnm').value;
+            var content  = document.getElementById('content').value;
+            
+            tmbSMS.open(phoneNum,content);
+        }
+    
+    function sendSMS(){
+        var phoneNum = document.getElementById('telnm').value;
+        var content  = document.getElementById('content').value;
+        //IOS不支持直接发送
+        tmbSMS.send(phoneNum,content);
+    }
+    
+        window.tmbOnload = function(){
+            tmbSMS.cbSend=function(opCode,dataType,data){
+                if(data==0){//发送成功
+                    alert("短信发送成功!");
+                }else{
+                    alert("短信发送失败!");
+                }
+            }
+        }
+    </script>
+    <body scroll="no" id="docs" style="margin-top:20px">
+        <div style="margin-top:10px">
+            <a href="index.html">GoBack</a>
+        </div>
+        <h2>短信相关（tmbSMS）</h2>
+        <div>
+            <span>输入电话号码</span>
+            <input type="text" id="telnm" value="10086"><br>
+            <span>输入短信内容</span>
+            <input type="textarea" id="content" value="欢迎你"><br>
+            <span>打开信息界面</span>
+            <input type="button" value="发送短信" onclick="openSMS();"><br>
+            <span>直接发送短信</span>
+            <input type="button" value="发送短信" onclick="sendSMS();">
+        </div>
+
+    </body>
+</html>

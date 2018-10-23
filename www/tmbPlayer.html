@@ -1,0 +1,650 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>播放器相关（tmbPlayer）</title>
+        <style type="text/css">
+            *{margin:0;padding:0}
+            .wrapper input ,.wrapper span{
+                margin-top:10px;
+                margin-bottom:10px;
+                font-size: 120%
+            }
+        .labelWrap {
+            width: 200px;
+            overflow: hidden;
+        }
+        /*==checkbox容器样式==*/
+        #sliderLabel,#streamLabel {
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            height: 30px;
+            overflow: hidden;/*==这个值很重要，将超出容器部分隐藏==*/
+            position: relative;
+            width: 100px;
+            float: left;
+        }
+        /*==隐藏input[type="checkbox"]==*/
+        #onOff,#streamOnOff {
+            border: 0 none !important;
+            clip: rect(1px,1px,1px,1px);
+            height: 1px !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            width: 1px !important;
+            margin:0;
+            padding:0
+        }
+        /*==checkbox处于默认状态位置（未选中）==*/
+        #slider,#stream {
+            left: -50px;/*定位在OFF位置*/
+            position: absolute;
+            top: 0;
+            margin:0;
+            padding:0
+        }
+        /*==ON、OFF和盖板定位位置==*/
+        #sliderOn,#streamOn,
+        #slideBlock,#streamBlock,
+        #sliderOff,#streamOff  {
+            display: block;
+            font-family: arial, verdana,sans-serif;
+            font-weight: bold;
+            height: 30px;
+            line-height: 30px;
+            position: absolute;
+            text-align: center;
+            top: 0px;
+            text-shadow: #093B5C 0px -1px 1px;
+            color: #fff;
+        }
+        #sliderOn,#streamOn {
+            background: -webkit-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#14539C), to(#3095C7));
+            background: -moz-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -o-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -ms-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            width: 54px;
+            left: 0;
+        }
+        #slideBlock,#streamBlock {
+            background: -webkit-linear-gradient(19% 75% 90deg,#FFFFFF, #A1A1A1);
+            background: #fff -webkit-gradient(linear, 0% 0%, 0% 100%, from(#A1A1A1), to(#FFFFFF));
+            background: -moz-linear-gradient(19% 75% 90deg,#FFFFFF, #A1A1A1);
+            background: -ms-linear-gradient(19% 75% 90deg,#FFFFFF, #A1A1A1);
+            background: -o-linear-gradient(19% 75% 90deg,#FFFFFF, #A1A1A1);
+            background: linear-gradient(19% 75% 90deg,#FFFFFF, #A1A1A1);
+            border-radius: 3px;
+            height: 28px;
+            left: 50px;
+            width: 48px;
+            border: 1px solid #e5e5e5;
+        }
+        /*==OFF按钮风格==*/
+        #sliderOff,#streamOff {
+            background: -webkit-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#14539C), to(#3095C7));
+            background: -moz-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -o-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: -ms-linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            background: linear-gradient(19% 75% 90deg,#3095C7, #14539C);
+            left: 96px;/*OFF按钮默认位置处*/
+            width: 54px;
+        }
+        #lableTitle{
+            line-height: 32px;
+        }
+        .switch-wrapper{padding:10px;}
+            </style>
+    </head>
+    <script type="text/javascript">
+        
+        var adUrl = /*"rtsp://117.131.217.32/test/22.mp4";*/"http://120.197.98.54:8088/fz/das_auto.mp4"; //广告视频URL
+        var videoUrl = "http://120.197.98.54:8088/fz/das_auto.mp4";
+//        var smoUrl = "http://221.7.13.196:8080/imgZoom/file/getFile.action?fileUrl=mp4local/20150415local/20150415104501/play.smo";
+        var smoUrl = "http://221.7.13.196:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150912/20150912162000/play.smo";
+        var jsonListUrl = {
+            index : "1",
+            UrlList :[
+                      {
+                      name:'1',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215318/play.smo'
+                      }
+                      ,
+                      {
+                      name:'2',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010726/play.smo'}
+                      ,
+                      {
+                      name:'3',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010555/play.smo'
+                      }
+                      ,
+                      {
+                      name:'4',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215420/play.smo'
+                      }
+                      ,
+                      {
+                      name:'5',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010748/play.smo'
+                      }
+                      ,
+                      {
+                      name:'6',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011647/play.smo'}
+                      ,
+                      {
+                      name:'7',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215353/play.smo'
+                      }
+                      ,
+                      {
+                      name:'8',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010920/play.smo'}
+                      ,
+                      {
+                      name:'9',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010614/play.smo'}
+                      ,
+                      {
+                      name:'10',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215446/play.smo'}
+                      ,
+                      {
+                      name:'11',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010047/play.smo'}
+                      ,
+                      {
+                      name:'12',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010938/play.smo'}
+                      ,
+                      {
+                      name:'13',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010107/play.smo'}
+                      ,
+                      {
+                      name:'14',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011727/play.smo'}
+                      ,
+                      {
+                      name:'15',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011745/play.smo'}
+                      ,
+                      {
+                      name:'16',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010814/play.smo'}
+                      ,
+                      {
+                      name:'17',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011542/play.smo'}
+                      ,
+                      {
+                      name:'18',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011800/play.smo'}
+                      ,
+                      {
+                      name:'19',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011029/play.smo'}
+                      ,
+                      {
+                      name:'20',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010024/play.smo'}
+                      ,
+                      {
+                      name:'21',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215219/play.smo'}
+                      ,
+                      {
+                      name:'22',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011709/play.smo'}
+                      ,
+                      {
+                      name:'23',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215248/play.smo'}
+                      ,
+                      {
+                      name:'24',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011014/play.smo'}
+                      ,
+                      {
+                      name:'25',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011603/play.smo'}
+                      ,
+                      {
+                      name:'26',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010859/play.smo'}
+                      ,
+                      {
+                      name:'27',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010702/play.smo'}
+                      ,
+                      {
+                      name:'28',
+                      url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011625/play.smo'}
+                      ]
+        };
+    
+    
+    var json_list_url = {
+        index : "8",
+        UrlList :[
+                  {
+                  name:'1',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215318/play.smo'
+                  }
+                  ,
+                  {
+                  name:'2',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010726/play.smo'}
+                  ,
+                  {
+                  name:'3',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010555/play.smo'
+                  }
+                  ,
+                  {
+                  name:'4',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215420/play.smo'
+                  }
+                  ,
+                  {
+                  name:'5',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010748/play.smo'
+                  }
+                  ,
+                  {
+                  name:'6',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011647/play.smo'}
+                  ,
+                  {
+                  name:'7',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215353/play.smo'
+                  }
+                  ,
+                  {
+                  name:'8',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010920/play.smo'}
+                  ,
+                  {
+                  name:'9',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010614/play.smo'}
+                  ,
+                  {
+                  name:'10',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215446/play.smo'}
+                  ,
+                  {
+                  name:'11',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010047/play.smo'}
+                  ,
+                  {
+                  name:'12',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010938/play.smo'}
+                  ,
+                  {
+                  name:'13',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010107/play.smo'}
+                  ,
+                  {
+                  name:'14',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011727/play.smo'}
+                  ,
+                  {
+                  name:'15',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011745/play.smo'}
+                  ,
+                  {
+                  name:'16',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010814/play.smo'}
+                  ,
+                  {
+                  name:'17',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011542/play.smo'}
+                  ,
+                  {
+                  name:'18',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011800/play.smo'}
+                  ,
+                  {
+                  name:'19',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011029/play.smo'}
+                  ,
+                  {
+                  name:'20',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010024/play.smo'}
+                  ,
+                  {
+                  name:'21',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215219/play.smo'}
+                  ,
+                  {
+                  name:'22',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011709/play.smo'}
+                  ,
+                  {
+                  name:'23',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150204/20150204215248/play.smo'}
+                  ,
+                  {
+                  name:'24',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011014/play.smo'}
+                  ,
+                  {
+                  name:'25',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011603/play.smo'}
+                  ,
+                  {
+                  name:'26',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010859/play.smo'}
+                  ,
+                  {
+                  name:'27',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128010702/play.smo'}
+                  ,
+                  {
+                  name:'28',
+                  url:'http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150128/20150128011625/play.smo'}
+                  ]
+    };
+    <!--document.cookie="userId=828";-->
+    <!--document.cookie="userName=hulk";-->
+    //位置和高宽均为屏幕实际像素大小
+    var playerX = 70;
+    var playerY = 60;
+    var playerWith = 500;
+    var playerHeight = 300;
+    
+    function playVideo(){
+        tmbPlayer.setFavor(1)
+        tmbPlayer.play(videoUrl);
+    }
+    function playSmoVideo() {
+        tmbPlayer.play(smoUrl);
+    }
+    function playVideoWithAd(){
+        tmbPlayer.setAdUrl(adUrl);
+        tmbPlayer.play(videoUrl);
+    }
+    function playListVideo() {
+        tmbPlayer.playList(JSON.stringify(json_list_url));
+    }
+    function embedPlayListurl() {
+        
+        tmbPlayer.setDisplayMode(3);
+        
+        tmbPlayer.embedPlayList(JSON.stringify(jsonListUrl), playerX, playerY, playerWith,
+                                playerHeight);
+    }
+    function embedPlayVideo(){
+        
+        //设置显示模式,默认不设置或设置不正确均为0，视频原始宽高,必须先与embedPlay设置才有效
+        // 0:视频原始宽高
+        // 1:齐宽
+        // 2:齐高
+        // 3:全屏（这里的全屏只表示在播放器所在的区域全部显示，并非所在屏幕全屏）
+        tmbPlayer.setDisplayMode(3);
+
+        //位置和高宽均为屏幕实际像素位置和大小
+        tmbPlayer.embedPlay(smoUrl,playerX,playerY,playerWith,playerHeight);
+    }
+    
+    function embedPlayVideoWithAd(){
+        
+        //输入有效的视频连接地址，如果无效则连接失败后，自动播放embedPlay中设置的URL视频内容
+        tmbPlayer.setAdUrl(adUrl);
+        
+        //设置显示模式,默认不设置或设置不正确均为0，视频原始宽高,必须先与embedPlay设置才有效
+        // 0:视频原始宽高
+        // 1:齐宽
+        // 2:齐高
+        // 3:全屏（这里的全屏只表示在播放器所在的区域全部显示，并非所在屏幕全屏）
+        tmbPlayer.setDisplayMode(3);
+        
+        ///位置和高宽均为屏幕实际像素位置和大小
+        tmbPlayer.embedPlay(videoUrl,playerX,playerY,playerWith,playerHeight);
+    }
+    
+    function movePlayer(flag){
+        
+        switch(flag)
+        {
+            case 0:
+            {
+                playerY -= 20;
+                if( playerY < 0) playerY = 0;
+            }
+            break;
+            case 1:
+            {
+                playerY += 20;
+                if( playerY > (640-playerWith)) playerY = 960-playerWith;
+            }
+            break;
+            case 2:
+            {
+                playerX -= 20;
+                if( playerX < 0) playerX = 0;
+            }
+            break;
+            case 3:
+            {
+                playerX += 20;
+                if( playerX > (960-playerHeight)) playerX = 960-playerHeight;
+            }
+            break;
+        }
+        //移动嵌入式播放器位置
+        tmbPlayer.reSizePlayer(playerX,playerY,playerWith,playerHeight);
+    }
+    function setFavor()
+    {
+            tmbPlayer.setFavor(1);
+    }
+    function cancelFavor()
+    {
+            tmbPlayer.setFavor(0);
+    }
+    window.tmbOnload = function() {
+        tmbPlayer.cbADDetailClicked = function(){
+            tmbWindow.alert("了解广告详情被点击...");
+        }
+        
+        tmbPlayer.cbSkipADClicked = function(){
+            tmbWindow.alert("跳过广告");
+        }
+        //直接播放时为全屏播放，当点击左上角的返回按你时，播放器将退出，此回掉为播放器退出时的回掉函数
+        //嵌入式播放时，当执行完close函数后将调用此函数
+        tmbPlayer.cbExited = function(){
+            tmbWindow.alert("播放器已经退出");
+        }
+        // data值 点击QQ按钮时为1，点击微信按钮时为2，点击朋友按钮时为3，点击腾讯微博按钮时为4，点击新浪微博时为5  ，点击QQ空间时为6。
+        tmbPlayer.cbGetShare = function(data) {
+            var sharePlatform = 0;
+            switch(data) {
+                case 1:
+                    sharePlatform = 7;
+                    break;
+                case 2:
+                    sharePlatform = 5;
+                    break;
+                case 3:
+                    sharePlatform = 6;
+                    break;
+                case 4:
+                    sharePlatform = 2;
+                    break;
+                case 5:
+                    sharePlatform = 1;
+                    break;
+                case 6:
+                    sharePlatform = 8;
+                    break;
+                default:
+                    break;
+            }
+
+            tmbSocial.directShare(sharePlatform, 4,'{"title":"热爱岛","content":"讲述三对情侣在一个名叫“热爱岛”的小岛上，经历20岁的冲动与叛逆、30岁的缠绵与纠结、40岁的沉淀与反省，最终都体会到了爱的真谛在于宽容与理解的故事。","url":"'+smoUrl+'","thumbUrl":"http://h.hiphotos.baidu.com/image/pic/item/6f061d950a7b02087cb713e060d9f2d3572cc8b0.jpg","author":"wasu","targetUrl":"'+videoUrl+'"}');
+        }
+
+        // 现在的状态为
+        //0为   未收藏
+        //1为 	已收藏
+        tmbPlayer.cbGetFavor = function(data) {
+            tmbWindow.alert("收藏的状态为"+data);
+        }
+        tmbPlayer.cbDownloadUrl = function(data){
+            tmbWindow.alert("下载地址:" + data);
+        }
+        tmbPlayer.cbFinished = function(opId, dataType, data){
+            tmbWindow.alert("播放完成：" + data);
+        }
+        tmbPlayer.cbSelected = function(opId, dataType, data){
+            tmbWindow.alert("播放选集：" + data);
+        }
+    }
+    
+        </script>
+    <body scroll="yes" id="docs" style="margin-top:20px">
+        <div class="wrapper">
+            
+            <div style="margin-top: 10px">
+                <a href="index.html">GoBack</a>
+            </div>
+            
+            <div class="switch-wrapper">
+                <div class="tmb-content tmb-header-fixed">
+                    自动旋转屏：<div class="labelWrap">
+                        <label for="onOff" id="sliderLabel">
+                            <input type="checkbox" id="onOff"/>
+                            <span id="slider">
+                                <span id="sliderOn" style="margin-top: 0px;">ON</span>
+                                <span id="sliderOff" style="margin-top: 0px;">OFF</span>
+                                <span id="slideBlock" style="margin-top: 0px;"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="switch-wrapper">
+                <div class="tmb-content tmb-header-fixed">
+                    自动选择码流：<div class="labelWrap">
+                        <label for="streamOnOff" id="streamLabel">
+                            <input type="checkbox" id="streamOnOff"/>
+                            <span id="stream">
+                                <span id="streamOn" style="margin-top: 0px;">ON</span>
+                                <span id="streamOff" style="margin-top: 0px;">OFF</span>
+                                <span id="streamBlock" style="margin-top: 0px;"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div><input type="button" value="收藏" onclick="setFavor();">
+            <input type="button" value="取消收藏" onclick="cancelFavor();"></div>
+            
+            <div><input type="button" value="直接播放" onclick="playVideo();">
+            <input type="button" value="直接播放smo" onclick="playSmoVideo();"></div>
+            <div><input type="button" value="直接播放+广告" onclick="playVideoWithAd();"></div>
+            <div><input type="button" value="嵌入式播放器" onclick="embedPlayVideo();"></div>
+            <div><input type="button" value="嵌入式播放器+广告" onclick="embedPlayVideoWithAd();"></div>
+            </br>
+            <input type="button" value="前进" onclick="tmbPlayer.seek(10);">
+                <input type="button" value="后退" onclick="tmbPlayer.seek(-10);">
+                    </br>
+                    <div>
+                        <input type="button" value="暂停" onclick="tmbPlayer.pause();">
+                            <input type="button" value="恢复" onclick="tmbPlayer.resume();">
+                                <input type="button" value="停止" onclick="tmbPlayer.stop();">
+                                    <input type="button" value="播放" onclick="tmbPlayer.startPlay();">
+                                        </div>
+                    </br>
+                    <div>
+                        <input type="button" value="隐藏嵌入式播放器" onclick="tmbPlayer.hideEmbedPlayer();">
+                            <input type="button" value="显示嵌入式播放器" onclick="tmbPlayer.showEmbedPlayer();">
+                                </div>
+                    </br>
+                    <div>
+                        <input type="button" value="上" onclick="movePlayer(0);">
+                            <input type="button" value="下" onclick="movePlayer(1);">
+                                <input type="button" value="左" onclick="movePlayer(2);">
+                                    <input type="button" value="右" onclick="movePlayer(3);">
+                                        </div>
+                    </br>
+                    <div><input type="button" value="关闭播放器" onclick="tmbPlayer.close();"></div>
+                    <div>
+                        <input type="button" value="进入选集播放" onclick="playListVideo();">
+                            <input type="button" value="进入嵌入式选集播放" onclick="embedPlayListurl();">
+                                </div>
+                    <br/>
+                    </div>
+        <br/>
+        <script type="text/javascript">
+            (function(){
+             var slib = document.querySelector('#sliderLabel'),
+             slider = document.querySelector('#slider'),
+             onOff = document.querySelector('#onOff');
+             
+             onOff.checked = true;
+             slider.style.left = 0 ;
+             function panelStatus(fn){
+             onOff.checked ? false : true;
+             if(onOff.checked){
+             slider.style.left = '-50px'; // 关
+             }else{
+             slider.style.left=0; // 开
+             }
+             if(typeof fn != 'undefined'){
+             fn(onOff.checked);
+             }
+             }
+             slider.addEventListener('click',function(){
+                                     panelStatus(function(status){
+                                                 if(status){
+                                                 tmbPlayer.setAutoRotation(true);
+                                                 }else{
+                                                 tmbPlayer.setAutoRotation(false);
+                                                 }
+                                                 
+                                                 });
+                                     })
+             })();
+             
+             (function(){
+              var slib = document.querySelector('#streamLabel'),
+              stream = document.querySelector('#stream'),
+              streamOnOff = document.querySelector('#streamOnOff');
+              
+              streamOnOff.checked = true;
+              stream.style.left = 0 ;
+              function panelStatus(fn){
+              streamOnOff.checked ? false : true;
+              if(streamOnOff.checked){
+              stream.style.left = '-50px'; // 关
+              }else{
+              stream.style.left=0; // 开
+              }
+              if(typeof fn != 'undefined'){
+              fn(streamOnOff.checked);
+              }
+              }
+              stream.addEventListener('click',function(){
+                                      panelStatus(function(status){
+                                                  if(status){
+                                                  tmbPlayer.setAutoAdjustStream(true);
+                                                 // tmbPlayer.setFavor(1);
+                                                  }else{
+                                                  tmbPlayer.setAutoAdjustStream(false);
+                                                  //tmbPlayer.setFavor(0);
+                                                  }
+                                                  
+                                                  });
+                                      })
+              })();
+              
+            </script>
+    </body>
+</html>

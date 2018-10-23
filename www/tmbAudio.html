@@ -1,0 +1,102 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>音频录播（tmbAudio）</title>
+<style type="text/css">
+div,input,span {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	// 开始录音
+	function startRecord() {
+
+		tmbAudio.startRecord();
+	}
+	// 停止录音
+	function stopRecord() {
+
+		tmbAudio.stopRecord();
+		tmbAudio.cbRecord = function(opCode, dataType, data) {
+
+			if (opCode) {
+				document.getElementById('endpath').innerHTML = data;
+			} else {
+				tmbWindow.alert("录音失败：" + data);
+			}
+		}
+	}
+    //初始化音频播放器
+	function initPlayer() {
+		var filepath = document.getElementById("endpath").innerHTML;
+		//var filepath = "box://Audio/chinastyle.mp3";
+		tmbAudio.open(filepath);
+		tmbAudio.cbOpen = function(opCode, dataType, data) {
+			if (opCode == 0) {
+				tmbWindow.alert("打开失败：" + data);
+			} else {
+				tmbWindow.alert("打开成功：" + data);
+			}
+		}
+	}
+	//开始播放录音文件
+	//在播放过程中调用tmbAudio.play(looptimes);会覆盖之前的looptimes设置
+	function start() {
+		var looptimes = document.getElementById("looptimes").value;
+		tmbAudio.play(looptimes);
+		// 循环播放结束回调，回调仅在有looptimes>0的时候有效
+		tmbAudio.cbPlayFinished = function(looptimes){
+			tmbWindow.alert("循环播放结束，执行次数为：" + looptimes);
+		}
+
+	}
+	//暂停播放录音文件，暂停后可调用start()继续播放
+	function pause() {
+		tmbAudio.pause();
+	}
+	//停止播放录音文件
+	//停止播放之后需要先调用open()再调用start()才能开始播放
+	function stop() {
+		tmbAudio.stop();
+	}
+	// 调节播放音量至最大，这个函数还没有实现
+	function volumeUp() {
+		tmbAudio.volumeUp();
+	}
+	// 调节播放音量至最小，这个函数还没有实现
+	function volumeDown() {
+		tmbAudio.volumeDown();
+	}
+</script>
+<body scroll="yes" id="docs" style="margin-top:20px">
+	<div>
+		<a href="index.html" onclick="stop();">GoBack</a>
+	</div>
+	<h2>音频录播（tmbAudio）</h2>
+	<input type="button" value="开始录音" onclick="startRecord();">
+
+	<input type="button" value="停止录音" onclick="stopRecord();">
+	<div>录音停止成功返回音频文件路径:</div>
+	<div id="endpath" style="height: 50px"></div>
+
+	<input type="button" value="初始化播放" onclick="initPlayer();">
+	<br />
+	<span>播放次数（-1为循环播放无限次，0为只播放一次，其他大于0的整数为循环播放次数）</span>
+	<br />
+	<input type="text" value="-1" id="looptimes">
+	<br />
+	<input type="button" value="播放录音" onclick="start();">
+	<br />
+	<input type="button" value="暂停播放" onclick="pause();">
+	<br />
+	<input type="button" value="停止播放" onclick="stop();">
+	<br />
+	<input type="button" value="增加音量" onclick="volumeUp();">
+	<br />
+	<input type="button" value="减小音量" onclick="volumeDown();">
+
+</body>
+</html>

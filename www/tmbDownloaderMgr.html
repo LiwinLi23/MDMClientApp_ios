@@ -1,0 +1,146 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MDM API Demo</title>
+<style type="text/css">
+div {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	var opCode = 1;
+	// 下载文件地址
+//var downloadUrl = "http://120.197.98.54:8088/fz/das_auto.mp4";
+var downloadUrl = "http://tmdm.temobi.com/mdmresource/docs/HTML-CSS%20Guide.docx";
+	// 下载文件本地保存路径，格式为box://打头
+//	var savePath = "box://";
+var savePath = "box://html-css.docx";
+	// 1.创建一个文件下载对象
+	function download() {
+		tmbDownloaderMgr.createDownloader(opCode);
+	}
+
+	// 2.通过回调函数返回值判断是否开始下载
+	function createDownloaderCallback(opId, dataType, data) {
+
+		if (opId == opCode) {
+            
+			if (data == 0) {
+				// 3.使用断点续传的方式开始下载文件
+				tmbDownloaderMgr.download(opCode, downloadUrl, savePath, 0);
+//                tmbDownloaderMgr.download(opCode,"http://61.167.237.15:8080/imgZoom/file/getFile.action?fileUrl=mp4/hot/20150609/20150609083327/_1159294301_1159295099_376108953_IOS_376112658.mp4","box://data/video/1433813543999/_1159294301_1159295099_376108953_IOS_376112658.mp4",0);
+			} else {
+				tmbWindow.alert("创建下载对象失败");
+			}
+		}
+	}
+	// 3.通过回调函数返回值得到下载的各种信息
+	function downloadCallback(opCode, fileSize, percent, status) {
+
+		switch (status) {
+		case 0:// 下载过程中显示下载进度
+			document.getElementById("percentage").value = percent + "%";
+			break;
+		case 1:// 下载完成
+            document.getElementById("percentage").value = percent + "%";
+			// 5.通过标示ID关闭创建的下载对象
+			tmbDownloaderMgr.closeDownloader(opCode);
+            tmbWindow.alert("下载完成");
+			break;
+		case 2:// 下载失败
+			tmbWindow.alert("下载失败");
+			// 5.通过标示ID关闭创建的下载对象
+			tmbDownloaderMgr.closeDownloader(opCode);
+            break;
+        case 3:// 下载暂停
+            document.getElementById("percentage").value = "下载ID；"+opCode+"暂停下载";
+            // 5.通过标示ID关闭创建的下载对象
+            break;
+        case 4:// 下载恢复
+            document.getElementById("percentage").value = "下载ID；"+opCode+"恢复下载";
+            // 5.通过标示ID关闭创建的下载对象
+            break;
+        case 5:// 下载开始
+            document.getElementById("percentage").value ="下载ID；"+opCode+ "下载开始";
+            // 5.通过标示ID关闭创建的下载对象
+            break;
+        case 6:// 下载取消
+            document.getElementById("percentage").value = "下载ID；"+opCode+"下载取消";
+            // 5.通过标示ID关闭创建的下载对象
+            break;
+		}
+	}
+	// 获取下载对象信息
+    //
+	function getInfo() {
+        
+        //注意：该方式是用来获取下载对象的信息，也即下载中的信息，如果下载没有开始或者已经完成，则不能返回任何信息
+		tmbDownloaderMgr.getInfo(downloadUrl);
+	}
+	function getInfoCallback(opId, dataType, data) {
+		var info = eval('(' + data + ')');
+		tmbWindow.alert("下载文件大小：" + info.fileSize);
+		tmbWindow.alert("已经下载文件大小：" + info.currentSize);
+		tmbWindow.alert("本地保存路径：" + info.savePath);
+		tmbWindow.alert("最近下载时间：" + info.lastTime);
+	}
+	// 清除下载任务
+	function clearTask() {
+		tmbDownloaderMgr.clearTask(downloadUrl);
+	}
+    //暂停下载
+    function pauseDownload() {
+        tmbDownloaderMgr.pauseDownload(opCode);
+    }
+    //继续下载
+    function resumeDownload() {
+        tmbDownloaderMgr.resumeDownload(opCode);
+    }
+
+    function cancelDownload() {
+        tmbDownloaderMgr.cancelDownload(opCode);
+    }
+	// 回调
+	window.tmbOnload = function() {
+		tmbDownloaderMgr.cbCreateDownloader = createDownloaderCallback;
+		tmbDownloaderMgr.onStatus = downloadCallback;
+		tmbDownloaderMgr.cbGetInfo = getInfoCallback;
+        
+        tmbFileMgr.cbOpenByOtherApp = openCallback;
+	}
+    function openTheFile() {
+        tmbFileMgr.openByOtherApp(savePath);
+    }
+function openCallback(data) {
+    tmbWindow.alert(data);
+}
+</script>
+
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>下载管理（tmbDownloaderMgr）</h2>
+	<div>
+		<input type="button" value="下载文件" onclick="download()">
+        <input id="percentage" type="text" value="下载进度：0%" />
+        <input type="button" value="获取下载信息" onclick="getInfo()" />
+<!--        <input type="button" value="清除下载任务" onclick="clearTask()" />-->
+	</div>
+    <div>
+        <input type="button" value="暂停下载" onclick="pauseDownload()" />
+    </div>
+    <div>
+        <input type="button" value="继续下载" onclick="resumeDownload()" />
+    </div>
+    <div>
+        <input type="button" value="取消下载" onclick="cancelDownload()" />
+    </div>
+    <div>
+        <input type="button" value="打开文件" onclick="openTheFile()" />
+    </div>
+</body>
+</html>

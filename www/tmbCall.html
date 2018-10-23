@@ -1,0 +1,53 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>电话功能（tmbCall）</title>
+<style type="text/css">
+div {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 150%
+}
+</style>
+<script type="text/javascript">
+	// 直接拨号
+	function phoneCall() {
+		var telnum = document.getElementById("telnum").value;
+		tmbCall.call(telnum);
+	}
+	// 到手机拨号界面，并传入要拨打的电话号码
+	function phoneDial() {
+		var telnum = document.getElementById("telnum").value;
+		tmbCall.dial(telnum);
+	}
+	//通话记录查询，这个函数暂时未实现
+	function queryCallRecords() {
+		tmbCall.queryCallRecords();
+	}
+	window.tmbOnload = function() {
+		tmbCall.cbCallLog = function(opCode, dataType, data) {
+			tmbWindow.alert(data);
+			var record = eval('(' + data + ')');
+		}
+	}
+</script>
+</head>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div>
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>电话功能（tmbCall）</h2>
+	<div>
+		<input type="text" value="10086" id="telnum" />
+	</div>
+	<div>
+		<input type="button" value="到拨号界面" onclick="phoneDial();" />
+	</div>
+	<div>
+		<input type="button" value="拨打电话" onclick="phoneCall();" />
+	</div>
+	<div>
+		<input type="button" value="通话记录查询" onclick="queryCallRecords();" />
+	</div>
+</body>
+</html>

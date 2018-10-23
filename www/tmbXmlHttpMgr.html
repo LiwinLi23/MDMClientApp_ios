@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	
+		<title>跨域异步请求代码示例</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+		<script>
+//            var testurl="http://lufe.deepat.net/search/pub/ApiTrace?sid=102&ot=add&&kword=魏新成&ti=魏新成&same_name=甲骨文_|_Oracle&relative_name=微软_|_谷歌&same_name=甲骨文_|_Oracle&un=9618&pkey=dfld2015302&timeStamp=1439889888196";
+		var testurl="http://lufe.deepat.net/search/pub/ApiTrace?sid=102&ot=add&&kword=%E9%AD%8F%E6%96%B0%E6%88%90&ti=%E9%AD%8F%E6%96%B0%E6%88%90&same_name=%E7%94%B2%E9%AA%A8%E6%96%87_|_Oracle&relative_name=%E5%BE%AE%E8%BD%AF_|_%E8%B0%B7%E6%AD%8C&same_name=%E7%94%B2%E9%AA%A8%E6%96%87_|_Oracle&un=9618&pkey=dfld2015302&timeStamp=1439889888196";
+			function xmlHttp(){
+    		var url = document.getElementById('add').value;
+				alert("URL value: " + url);
+    		tmbXmlHttpMgr.open(1, "GET", url,"");
+				tmbXmlHttpMgr.onData = httpSuccess;
+    		tmbXmlHttpMgr.send(1);
+			}
+			
+			function httpSuccess(opid,status,result){
+//				alert("Okay! success now!");
+                if(status==1){
+                    tmbXmlHttpMgr.close(1);
+                    document.getElementById('adre').value  = "opCode:" + opid + "<br> result:" + result;
+                    alert("Okay! success now!");
+                }
+                else if(status==-1) {
+                    alert("Okay! Error now!");
+                }
+
+			}
+			
+		function xmlHttptest(){
+//            tmbXmlHttpMgr.open(1, "GET", "http://xj.jk.wasu.com:8080/examples/cookie.jsp","");
+    		tmbXmlHttpMgr.open(1, "GET", testurl,"");
+				tmbXmlHttpMgr.onData = httpSuccess;
+    		tmbXmlHttpMgr.send(1);
+			}
+			
+		</script>
+	</head>
+	<body>
+  	<label>请求内容：</label>
+		<textarea placeholder="Test" id="add" >http://tmdm.temobi.com/mdm/api/test/tmbXmlHttpMgr</textarea>
+		<label>请求结果：</label>
+		<textarea placeholder="" id="adre" ></textarea>
+		<div data-role="button" onclick=xmlHttp()><span ><span>发送请求 *</span></span></div>
+		<input type="button" value="Send" onClick="xmlHttp()"></input>
+		
+			<div>
+		<input type="button" value="特殊字符请求" onclick="xmlHttptest()" />
+	</div>
+	</body>
+</html>

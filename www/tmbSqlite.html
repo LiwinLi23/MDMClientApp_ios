@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>index</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<script>
+
+var createString="CREATE TABLE IF NOT EXISTS CONTACTS(ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, ADDRESS TEXT,PHONE INTEGER,HEIGHT REAL)";
+	function createDB(){
+        tmbSqlite.cbCreateTable=function(opCode, dataType, data){
+            tmbWindow.alert(data);
+        }
+        tmbSqlite.createOrOpenTable("person",createString);
+	}
+//	var  exesql="INSERT INTO CONTACTS (NAME,ADDRESS,PHONE,HEIGHT) VALUES(\"姬锟\",\"陕西\",1398080808080,168.5)";
+    var  exesql="INSERT INTO CONTACTS (NAME,ADDRESS,PHONE,HEIGHT) VALUES(?,?,?,?)";
+    var  exeArgs=["李华林","四川省成都市",18682651980,172.0];
+	function exeSQL(){
+        tmbSqlite.cbExecSQL=function(opCode, dataType, data){
+            tmbWindow.alert(data);
+        }
+        tmbSqlite.execSQL(exesql,exeArgs);
+	}
+	
+	var query="SELECT ADDRESS,PHONE,HEIGHT FROM contacts WHERE NAME=?";
+	var selectionArgs=["姬锟"];
+    
+    var queryOnlySql="SELECT ID,ADDRESS,NAME,PHONE,HEIGHT FROM contacts WHERE 1 = 1   ORDER BY ID DESC LIMIT 0, -1";
+	function querySQL(){
+            tmbSqlite.cbQuerySQL=function(opCode, dataType, data){
+                var result = "";
+                for(var i=0;i<data.length;i++) {
+                    result += "ID : "+data[i].ID+'\n'+"名字 : "+data[i].NAME+'\n'+"地址 : "+data[i].ADDRESS+'\n'+"手机 : "+data[i].PHONE+'\n'+"身高 : "+data[i].HEIGHT+'\n\n';
+                }
+            
+            tmbWindow.alert(result);
+        }
+            tmbSqlite.querySQL(queryOnlySql);
+//        tmbSqlite.querySQL(query,selectionArgs);
+	}
+</script>
+</head>
+<body>
+	<h2>SQL管理（tmbSqlite）</h2>
+	<div>
+		<input type="button" value="创建数据库" onclick="createDB();" />
+	</div>
+    <br />
+	<div>
+		<input type="button" value="执行SQL语句" onclick="exeSQL();" />
+	</div>
+    <br />
+	<div>
+		<input type="button" value="查询SQL语句" onclick="querySQL();" />
+	</div>
+    <br />
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>MDM API Demo</title>
+        <script>
+            var url = "ws://192.168.0.103:8080/mdm/log/test";
+            // 发起连接
+            function connect() {
+                tmbWebSocket.connect(url);
+            }
+        function disconnect() {
+            tmbWebSocket.closeconnect();
+        }
+        // 连接成功回调
+        function cbOpen() {
+            // 发送数据
+            tmbWebSocket.sendData("我是测试数据");
+        }
+        // 收到远端数据回调
+        function cbMessage(data) {
+            document.getElementById('msg').innerHTML = data;
+        }
+        // 出错回调
+        function cbError(data) {
+            document.getElementById('msg').innerHTML = data;
+        }
+        // 关闭回调
+        function cbClose(data) {
+            document.getElementById('msg').innerHTML = data;
+        }
+        
+        window.tmbOnload = function(data) {
+            tmbWebSocket.onOpen = cbOpen;
+            tmbWebSocket.onMessage = cbMessage;
+            tmbWebSocket.onError = cbError;
+            tmbWebSocket.onClose = cbClose;
+        }
+        </script>
+    </head>
+    <body scroll="no" id="docs" style="margin-top:20px">
+        <div style="margin-top:10px">
+            <a href="index.html">GoBack</a>
+        </div>
+        <h2>WebSocket（tmbWebSocket）</h2>
+        <input type="button" value="连接远端" onclick="connect();" />
+        <input type="button" value="断开连接" onclick="disconnect();" />
+        <div id="msg" style="height: 20px"></div>
+    </body>
+</html>

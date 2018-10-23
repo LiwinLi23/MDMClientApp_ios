@@ -1,0 +1,70 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网络检测（tmbNet）</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	// 是否连网
+	function testNet(opId, dataType, data) {
+
+		if (data == "true") {
+			tmbNet.cbNetState = testState;
+			tmbNet.getNetState();
+		} else {
+			var buttonsInfo = new Array();
+			buttonsInfo[0] = "退出";
+			tmbWindow.cbConfirm = confirmExit;
+			tmbWindow.confirm("提示", "您的手机未联网，请检查您的手机！", buttonsInfo);
+		}
+	}
+
+	// 连接的是什么网络
+	function testState(opCode, opStatus, net) {
+		if (net == "wifi") {
+			//wifi情况处理
+			tmbWindow.alert("当前使用的是WIFI网络");
+		} else if (net == "not_connected") {
+			tmbWindow.alert("没有连接网络");
+		} else {
+			//非wifi情况，可以根据上面说明来区分是运营商网络制式
+			var btnArray = new Array("确定", "退出");
+			tmbWindow.cbConfirm = confirmSuccess;
+			tmbWindow.confirm("提示", "当前为3G网络，播放视频将产生流量！", btnArray);
+		}
+	}
+
+	function confirmExit(opId, dataType, data) {
+		tmbWindow.close(-1);
+	}
+
+	function confirmSuccess(opId, dataType, data) {
+		if (data == 0) {
+			// 确定
+		} else {
+			// 退出
+			tmbWindow.close(-1);
+		}
+	}
+
+	window.tmbOnload = function() {
+		tmbNet.cbNetAvailable = testNet;
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>网络检测（tmbNet）</h2>
+	<div>
+		<input type="button" value="检查网络情况"
+			onclick="tmbNet.isNetworkAvailable();">
+	</div>
+</body>
+</html>

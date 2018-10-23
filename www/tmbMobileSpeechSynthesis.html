@@ -1,0 +1,99 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>文字转语音（tmbMobileSpeechSynthesis）</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	//初始化语音合成对象
+	function initTrans() {
+		//传入在官网申请的appid，传入空会有每天使用次数限制
+		tmbMobileSpeechSynthesis.InitMobileSpeech("51aed671");
+		//设置是否播放背景音乐
+		tmbMobileSpeechSynthesis.haveBackgroundMusic("1");
+		//设置播放语速
+		tmbMobileSpeechSynthesis.setVoiceSpeed(80);
+		//设置播放音量
+		tmbMobileSpeechSynthesis.setVolumeSize("80");
+		//设置播放的人物角色
+		tmbMobileSpeechSynthesis.setSpeakPerson("xiaoyan");
+		//设置合成采样率
+		tmbMobileSpeechSynthesis.setSampleRate("16000");
+		//设置是否显示合成进度提示框
+		tmbMobileSpeechSynthesis.isDisplayProgressTips(1);
+	}
+	//开始合成
+	function startTrans() {
+		initTrans();
+		tmbMobileSpeechSynthesis.startSpeaking("上海自来水来自海上");
+		//注册获取合成错误码回调
+		tmbMobileSpeechSynthesis.getErrorCode();
+		//注册获取合成错误描述回调
+		tmbMobileSpeechSynthesis.getErrorDescription();
+	}
+	//暂停合成
+	function pauseTrans() {
+		tmbMobileSpeechSynthesis.pauseSpeaking();
+		//注册获取合成错误码回调
+		tmbMobileSpeechSynthesis.getErrorCode();
+		//注册获取合成错误描述回调
+		tmbMobileSpeechSynthesis.getErrorDescription();
+	}
+	//恢复合成
+	function resumeTrans() {
+		tmbMobileSpeechSynthesis.resumeSpeaking();
+		//注册获取合成错误码回调
+		tmbMobileSpeechSynthesis.getErrorCode();
+		//注册获取合成错误描述回调
+		tmbMobileSpeechSynthesis.getErrorDescription();
+	}
+	//停止合成
+	function stopTrans() {
+		tmbMobileSpeechSynthesis.stopSpeaking();
+		//注册获取合成错误码回调
+		tmbMobileSpeechSynthesis.getErrorCode();
+		//注册获取合成错误描述回调
+		tmbMobileSpeechSynthesis.getErrorDescription();
+	}
+	function getErrorCodeCallBack(data) {
+		tmbWindow.alert(data);
+	}
+	function getErrorDescriptionCallBack(data) {
+		tmbWindow.alert(data);
+	}
+	//回调返回当前播放是否已经结束
+	function getIsEndCallBack(data) {
+		tmbWindow.alert(data);
+	}
+	//回调
+	window.tmbOnload = function() {
+		tmbMobileSpeechSynthesis.cbgetErrorCode = getErrorCodeCallBack;
+		tmbMobileSpeechSynthesis.cbgetErrorDescription = getErrorDescriptionCallBack;
+		tmbMobileSpeechSynthesis.cbIsEnd = getIsEndCallBack;
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>文字转语音（tmbMobileSpeechSynthesis）</h2>
+	<div>
+		<input type="button" value="启动语音合成" onclick="startTrans()">
+	</div>
+	<div>
+		<input type="button" value="暂停语音合成" onclick="pauseTrans()">
+	</div>
+	<div>
+		<input type="button" value="重启语音合成" onclick="resumeTrans()">
+	</div>
+	<div>
+		<input type="button" value="停止语音合成" onclick="stopTrans()">
+	</div>
+</body>
+</html>

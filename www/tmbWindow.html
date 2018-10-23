@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>窗口对象（tmbWindow）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+    body{
+        background: white;
+    }
+input,span,label  {
+	margin-top: 15px;
+	margin-bottom: 15px;
+    font-size: 150%;
+}
+</style>
+<script>
+    window.tmbOnload = function() {
+    tmbWindow.cbGoBack = function()
+    {
+        tmbWindow.alert("tmbWindow.html");
+    };
+    }
+	function saveValue() {
+		var ls = document.getElementById('ls');
+		localStorage.removeItem('ls');
+		localStorage.setItem("ls", ls.value);
+	}
+
+	function getValue() {
+		var saved = document.getElementById('saved');
+		saved.innerHTML = localStorage.getItem("ls");
+	}
+
+	var url1 = "http://pim1.monternet.com/";
+	var url2 = "http://m.10086.cn/wireless/3g/index.htm";
+	var url3 = "http://wap.12530.com";
+	var url4 = "tmbWindowWindowOpen.html";
+
+	// 跳转到下个页面
+	function towebHtml() {
+		// 打开窗口宽度和高度留空，默认为设备屏幕宽高
+		tmbWindow.open("monternet", "0", url1, "1", "", "", "7", "300");
+	}
+
+	// 跳转到下个页面
+	function towapHtml() {
+		// 打开窗口宽度和高度留空，默认为设备屏幕宽高
+		tmbWindow.open("wapcom", "0", url3, "1", "", "", "7", "300");
+	}
+
+	// 通过tmbWindow跳转到下个本地页面
+	function toLocalHtml() {
+		// 打开窗口宽度和高度留空，默认为设备屏幕宽高
+		tmbWindow.open("tmbWindowWindowOpen", "0", url4, "1", "", "", "7", "300");
+	}
+	// 屏幕宽度
+	var width = window.screen.width;
+	// 屏幕高度
+	var height = window.screen.height;
+	function openSlibing() {
+
+		tmbWindow.openSlibing("1", "0", url4, "", "", height / 5);
+		tmbWindow.openSlibing("2", "0", url4, "", "", height / 5);
+	}
+
+	var popName = "popWin";
+	var x =  width;
+	var y = 0;
+	var popWidth = width / 3;
+	var popHeight = height;
+	// 打开浮动窗口1
+	function openPopover1() {
+		tmbLog.sendLog("popWidth-->" + popWidth);
+		// 宽度和高度传0让popover自适应
+		tmbWindow.openPopover(popName, "0", "showImg.html", "", 100, y, width / 3,
+				100, 15, "0");
+	}
+	
+	var popName2 = "popWin2";
+	var x2 = 0;
+	var y2 = 0;
+	var popWidth2 = width;
+	var popHeight2 = height / 2;
+	// 打开浮动窗口2
+	function openPopover2() {
+		// 宽度和高度传0让popover自适应
+		tmbWindow.openPopover(popName2, "0", "showImg.html", "", x2, y2,
+				200, 200, 15, "0");
+	}
+	
+	var popName3 = "popWin3";
+	var x3 = width / 2;
+	var y3 = height / 3;
+	var popWidth3 = width / 3;
+	var popHeight3 = height / 3;
+	// 打开浮动窗口3
+	function openPopover3() {
+		tmbWindow.openPopover(popName3, "0", "showImg.html", "", x3, y3,
+				200, 200, 15, "0");
+	}
+    // 关闭浮动窗口1
+	function closePopover1() {
+		tmbWindow.closePopover(popName);
+	}
+	// 关闭浮动窗口2
+	function closePopover2() {
+		tmbWindow.closePopover(popName2);
+	}
+	// 关闭浮动窗口3
+	function closePopover3() {
+		tmbWindow.closePopover(popName3);
+	}
+	// 浮动窗口1到最顶层
+	function bringToFront1() {
+		tmbWindow.bringToFront(popName);
+	}
+	// 浮动窗口2到最顶层
+	function bringToFront2() {
+		tmbWindow.bringToFront(popName2);
+	}
+	// 浮动窗口3到最顶层
+	function bringToFront3() {
+		tmbWindow.bringToFront(popName3);
+	}
+	var flag = 1;
+	// 更改浮动窗口1的大小
+	function updatePopover() {
+		if (flag == 1) {
+			tmbWindow.setPopoverFrame(popName, x + 200, y + 200,
+					300, 300);
+			flag = 2;
+		} else {
+			tmbWindow.setPopoverFrame(popName, width / 3, 0, 0, 0);
+			flag = 1;
+		}
+	}
+	// 执行popover页面中的js函数更改图片
+	function evaluatePopoverScript() {
+		var js = "javascript:updateImg();";
+		tmbWindow.evaluatePopoverScript("root", popName, js);
+	}
+	// popover执行动画
+	function executePopoverAnim() {
+		//1.初始化动画
+		tmbWindow.beginAnimition();
+		//2.执行位移动画，参数分别为，x轴平移距离，y轴平移距离，第三个参数无效
+		tmbWindow.makeTranslation(popName, -1 * (width - popWidth), 0);
+		//3.设置动画在1秒后执行
+		tmbWindow.setAnimitionDelay(0);
+		//4.设置动画持续时间为1秒
+		tmbWindow.setAnimitionDuration(300);
+		//5.设置动画重复执行次数为5次
+		tmbWindow.setAnimitionRepeatCount(0);
+		//6.设置动画执行完之后是否回到开始状态，0-停留在结束状态，1-回到开始状态
+		tmbWindow.setAnimitionAutoReverse(0);
+		//7.执行动画，完成之后第二次执行需要重复1-7步骤
+		tmbWindow.commitAnimition(popName);
+	}
+    // 设置浮动窗口1具备下拉刷新能力
+	function setBounce() {
+		//tmbWindow.setBounce("1");
+		tmbWindow.showBounceView(popName2, "0", "#fffff0");
+	}
+    // 关闭浮动窗口1的下拉刷新能力
+	function closeBounce() {
+		tmbWindow.hiddenBounceView(popName2, "0");
+	}
+    
+    // 弹出对话框
+	function showDialog(flag) {
+		if (flag == 1) {
+			tmbWindow.alert("融创天下", "MDM Android平台", "关闭它");
+		} else {
+			tmbWindow.alert("MDM Android平台");
+		}
+	}
+
+	var btns = [ '确定', '取消', '关闭' ];
+	function confirm() {
+		tmbWindow.confirm("融创天下", "MDM Android平台", btns);
+	}
+
+	var choices = [ "小米", "华为", "三星", "苹果" ];
+	function actionSheet() {
+		tmbWindow.actionSheet("融创天下", "取消", choices);
+	}
+
+	function toast() {
+		tmbWindow.toast(0, 9, "没有更新", 1000);
+	}
+
+	function show3dLoading() {
+		tmbWindow.showProgressDialog3D("", "", "", "", "");
+	}
+
+	function showLoading() {
+		tmbWindow.showProgressDialog("", "", "", "");
+	}
+
+</script>
+</head>
+<body>
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>窗口对象（tmbWindow）</h2>
+	<font>设置localStorage值：</font>
+	<input type="text" id="ls" />
+	<br />
+	<font>已保存的值：</font>
+	<font id="saved"></font>
+	<br />
+	<input type="button" value="保存localStorage值" onclick="saveValue();" />
+	<br />
+	<input type="button" value="查询已保存的值" onclick="getValue();" />
+	<br />
+
+	<div>
+		<a href="tmbWindowWebView.html">页面内部切换(本地页面webview跳转)</a>
+	</div>
+	<div>
+		<a href="http://wap.12530.com">页面内部切换(重定向外链接webview跳转)</a>
+	</div>
+	<input type="button" value="跳转到下个页面(本地頁面tmbWindow跳转)" onclick="toLocalHtml();" />
+	<input type="button" value="跳转到下个页面(外链接tmbWindow跳转)" onclick="towebHtml();" />
+	<input type="button" value="跳转到下个页面(重定向外链接tmbWindow跳转)" onclick="towapHtml();" />
+
+	<input type="button" value="打开三窗口" onclick="openSlibing();" />
+	<br />
+	<div>浮动窗口操作</div>
+	<input type="button" value="打开浮动窗口1" onclick="openPopover1();" />
+	<br />
+	<input type="button" value="打开浮动窗口2" onclick="openPopover2();" />
+	<br />
+	<input type="button" value="打开浮动窗口3" onclick="openPopover3();" />
+	<br />
+	<input type="button" value="关闭浮动窗口1" onclick="closePopover1();" />
+	<br />
+	<input type="button" value="关闭浮动窗口2" onclick="closePopover2();" />
+	<br />
+	<input type="button" value="关闭浮动窗口3" onclick="closePopover3();" />
+	<br />
+	<input type="button" value="浮动窗口1到顶层" onclick="bringToFront1();" />
+	<br />
+	<input type="button" value="浮动窗口2到顶层" " onclick="bringToFront2();" />
+	<br />
+	<input type="button" value="浮动窗口3到顶层" " onclick="bringToFront3();" />
+	<br />
+	<input type="button" value="浮动窗口大小位置改变" onclick="updatePopover();" />
+	<br />
+	<input type="button" value="浮动窗口执行JS"
+		onclick="evaluatePopoverScript();" />
+	<br />
+	<input type="button" value="浮动窗口执行动画" onclick="executePopoverAnim();" />
+	<br />
+	<div>窗口属性设置</div>
+	<input type="button" value="设置窗口弹动效果" onclick="setBounce();" />
+	<br />
+	<input type="button" value="关闭窗口弹动效果" onclick="closeBounce();" />
+	<br />
+	<div>原生UI控制</div>
+	<input type="button" value="打开带按钮和标题的对话框" onclick="showDialog(1);" />
+	<br />
+	<input type="button" value="打开只有内容的对话框" onclick="showDialog(2);" />
+	<br />
+	<input type="button" value="打开3个按钮的对话框" onclick="confirm();" />
+	<br />
+	<input type="button" value="打开选择对话框" onclick="actionSheet();" />
+	<br />
+	<input type="button" value="弹出土司" onclick="toast();" />
+	<br />
+	<input type="button" value="打开3d旋转加载对话框" onclick="show3dLoading();" />
+	<br />
+	<input type="button" value="打开加载对话框" onclick="showLoading();" />
+	<br />
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>index</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <style type="text/css">
+        input,span,label  {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-size: 150%;
+        }
+    </style>
+<script>
+	window.tmbOnload = function() {
+		var vl = document.getElementById("vl");
+		vl.innerHTML = localStorage.getItem("ls");
+	}
+
+	var url = "num3.html";
+	function openNext() {
+		tmbWindow.open("num3", "0", url, "1", "", "", "7", "300");
+	}
+
+	function goback() {
+//		tmbWindow.back();
+		tmbWindow.goBack();
+	}
+
+	var url1 = "errorPage.html";
+
+	function openSlibing() {
+		var width = window.screen.width;
+		var height = window.screen.height;
+		tmbWindow.openSlibing("1", "0", url1, "", "", height / 5);
+		tmbWindow.openSlibing("2", "0", url1, "", "", height / 5);
+	}
+</script>
+</head>
+<body style="background: green" style="margin-top:20px">
+	<h2>这是跳转后的页面1</h2>
+	<font>获取到的localStorage值：</font>
+	<div id="vl"></div>
+	<br />
+	<input type="button" value="打开下一个页面" onclick="openNext();" />
+	<br />
+	<input type="button" value="回到上一个窗口" onclick="goback();" />
+	<br />
+	<input type="button" value="打开三窗口" onclick="openSlibing();" />
+    <br />
+</body>
+</html>

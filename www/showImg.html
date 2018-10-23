@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>showImg</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+img {
+	max-width: 100%;
+	width: 100%;
+}
+</style>
+<script>
+	var updateFlag = 1;
+	function updateImg() {
+        alert("在浮动窗口中执行JS");
+
+	}
+	tmbWindow.onBounceStateChange = function(type) {
+		setTimeout(function(){
+			tmbWindow.resetBounceView("popWin2", "0");
+			if (updateFlag == 1) {
+	            document.getElementById("myImg").src = "./image/magic.jpg";
+	            updateFlag = 2;
+	        } else {
+	            document.getElementById("myImg").src = "./image/sunraise.jpg";
+	            updateFlag = 1;
+	        }
+		}, 1500);
+	}
+	
+</script>
+</head>
+<body style="background: red">
+	asasa
+</body>
+</html>

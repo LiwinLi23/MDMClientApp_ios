@@ -1,0 +1,274 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>百度地图（tmbBaiduMap）</title>
+        <style type="text/css">
+            input,span,label {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                font-size: 150%
+            }
+        </style>
+    </head>
+    <script type="text/javascript">
+        //在进行其他的所有地图操作前必须先打开地图
+        //地图悬浮窗全屏模式其实减去了顶部状态栏的高度
+        function openBMap() {
+            
+            tmbBaiduMap.open("wN8GpVrmqONs2EFK5ynGK1lU", 150, 50, 440, 300, 104.061071, 30.592672);
+            return;
+            
+            // 获取手机屏幕分辨率
+            tmbDevice.getInfo('21');
+            tmbDevice.cbGetInfo = function(opCode, dataType, data) {
+                var device = eval('(' + data + ')');
+                var screenW = device.width;
+                var screenH = device.height;
+                
+                var width = screenW / 2;
+                var height = screenH / 2;
+                var x = screenW - width;
+                var y = (screenH - height) / 2;
+                // 打开百度地图，地图操作中心点为(0,0)的时候默认以北京天安门为中心
+                // 函数第一个参数地图使用权限Key在Android平台无意义
+                tmbBaiduMap.open(0, x, y, width, height, 104.061071, 30.592672);
+                //tmbBaiduMap.open(0, x, y, screenW, screenH, 104.061071, 30.592672);
+            }
+        }
+	//隐藏地图，地图隐藏之后，所有状态将重置
+	function hideBMap() {
+		tmbBaiduMap.hide();
+	}
+	//设置地图中心点
+	function setCenter() {
+		tmbBaiduMap.setCenter(116.308141, 40.056878);
+	}
+	//获取当前位置，调用之后将不停的刷新当前位置并在地图上显示标注
+	function getCurLocation() {
+		tmbBaiduMap.getCurrentLocation();
+		// 获取位置成功回调
+		tmbBaiduMap.cbGetCurrentLocation = function(opCode, dataType, data) {
+			//定位结果数据为JSON
+			var result = eval('(' + data + ')');
+			var longitude = result.longitude + "";
+			if (longitude != null && longitude.length > 0) {
+				document.getElementById('longitude').value = longitude;
+			}
+			var latitude = result.latitude + "";
+			if (latitude != null && latitude.length > 0) {
+				document.getElementById('latitude').value = latitude;
+			}
+		}
+	}
+	// 关闭定位
+	function stopGetLocation(){
+		tmbBaiduMap.stopGetLocation();
+	}
+	//设置地图缩放级别
+	function setZoomLevel() {
+		var zoomlevel = document.getElementById("zoomlevel").value;
+		tmbBaiduMap.setZoomLevel(zoomlevel);
+	}
+	//地图放大一个级别
+	function zoomIn() {
+		tmbBaiduMap.zoomIn();
+	}
+	//地图缩小一个级别
+	function zoomOut() {
+		tmbBaiduMap.zoomOut();
+	}
+	//设置地图UI控制,控制类型为:1.罗盘，2.缩放手势，3.平移手势，4.旋转手势，5.俯视手势
+	function setUISetting() {
+		var uiMode = document.getElementById("uiMode").value;
+		var isEnable = document.getElementById("isEnable").value;
+		tmbBaiduMap.setUISetting(uiMode, isEnable);
+	}
+	// 注意JSON的ID不能重复，否则重复ID的标注数据只会保留最后那个
+	// 前后几次添加操作如果有ID重复的标注，首次添加操作有效，后面的将忽略
+	// android平台上标注的宽度和高度无效，可不设置
+	// 标注图标的存储路径可使用wgt://，也可以使用box://
+    //
+    // id               :标注的ID，随机不重复，用户指定（必填）
+    // longitude        :标注的经度，float类型（必填）
+    // latitude         :标注的纬度，float类型（必填）
+    // annotationUrl    :标注的图片，支持网络和本地图片,可以不使用，不使用时显示默认图钉（可选）
+    // annotationWidth  :标注图片显示在地图上的宽度（可选）
+    // annotationHeight :标注图片显示在地图上的高度（可选）
+    // imageUrl         :点击标注弹出的提示框中左侧的图片，支持网络和本地图片，可以不设置，不设置时提示框中不显示任何图片（可选）
+    // imageWidth       :点击标注弹出的提示框中左侧的图片的宽度（可选）
+    // imageHeight      :点击标注弹出的提示框中左侧的图片的高度（可选）
+    // message          :点击标注后提示的内容（必填）
+    // title            :点击标注后提示的标题（必填）
+    
+	var markMsgJson = '{"markInfo":[\
+    {\
+        "id":"1",\
+        "longitude":"104.021071",\
+        "latitude":"30.562672",\
+        "annotationUrl":"http://pic.sucaibar.com/pic/201306/25/b22d5b63dd.png",\
+        "annotationWidth":"80",\
+        "annotationHeight":"80",\
+        "imageUrl":"http://www.temobi.com/templets/rongchuang/images/logo.jpg",\
+        "imageWidth":"50",\
+        "imageHeight":"30",\
+        "message":"指定标注图片和气泡中的图标",\
+        "title":"演示1"\
+    },\
+    {\
+        "id":"2",\
+        "longitude":"104.066071",\
+        "latitude":"30.607672",\
+        "annotationUrl":"http://pic.sucaibar.com/pic/201306/25/b22d5b63dd.png",\
+        "annotationWidth":"80",\
+        "annotationHeight":"80",\
+        "message":"仅指定标注图片",\
+        "title":"演示2"\
+    },\
+    {\
+        "id":"3",\
+        "longitude":"104.146071",\
+        "latitude":"30.561672",\
+        "imageUrl":"http://www.temobi.com/templets/rongchuang/images/logo.jpg",\
+        "imageWidth":"50",\
+        "imageHeight":"30",\
+        "message":"使用默认图钉定位，使用指定图片为气泡中左侧图标",\
+        "title":"演示3"\
+    },\
+    {\
+        "id":"4",\
+        "longitude":"104.186071",\
+        "latitude":"30.607672",\
+        "annotationUrl":"",\
+        "annotationWidth":"",\
+        "annotationHeight":"",\
+        "imageUrl":"wgt://image/icon_2.png",\
+        "imageWidth":"30",\
+        "imageHeight":"30",\
+        "message":"使用本地图片",\
+        "title":"演示4"\
+    }\
+    ]}';
+    
+	//在地图上添加标注
+	function addMark() {
+		tmbBaiduMap.addMark(markMsgJson);
+	}
+	//清除标注
+	function clearMarks() {
+        
+        //传入参数为ID的数组，如果传入参数为空或者错误，则清除全部标记
+		tmbBaiduMap.clearMarks();//清除全部标记
+        //tmbBaiduMap.clearMarks(["1"]);//清除ID为1的标记
+        //tmbBaiduMap.clearMarks(["1","2"]);//清除ID为1和2的标记
+	}
+	
+	window.tmbOnload = function() {
+        
+        tmbBaiduMap.cbMarkBubbleSelected = function( outId ) {
+            tmbWindow.alert("气泡被点击ID:"+outId);
+        }
+        
+        tmbBaiduMap.cbMarkSelected = function( outId ) {
+            tmbWindow.alert("标记被点击ID:"+outId);
+        }
+	}
+    </script>
+    <body scroll="no" id="docs" style="margin-top:20px"> 
+        
+        <div style="margin-top: 10px">
+            <a href="index.html" onclick="tmbBaiduMap.close();">GoBack</a>
+        </div>
+        <h2>百度地图（tmbBaiduMap）</h2>
+        
+        <div>
+            <input type="button" value="打开百度地图" onclick="openBMap();" />
+        </div>
+        <div>
+            <input type="button" value="关闭百度地图" onclick="tmbBaiduMap.close();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="隐藏地图" onclick="hideBMap();" />
+        </div>
+        <div>
+            <input type="button" value="显示地图" onclick="tmbBaiduMap.show();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="设置地图中心点" onclick="setCenter();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="定位并获取当前位置" onclick="getCurLocation();" />
+        </div>
+        <div>
+            <input type="button" value="停止定位" onclick="tmbBaiduMap.stopGetLocation();" />
+        </div>
+        <label>当前经度:</label>
+        <div><input type="text" id="longitude" readonly="readonly"></div>
+        <label>当前纬度:</label>
+        <div><input type="text" id="latitude" readonly="readonly"></div>
+        <br>
+        <div>
+            地图缩放率：
+            <select id="zoomlevel" onchange="setZoomLevel();">
+                <option value="3">级别:3</option>
+                <option value="4">级别:4</option>
+                <option value="5">级别:5</option>
+                <option value="6">级别:6</option>
+                <option value="7">级别:7</option>
+                <option value="8">级别:8</option>
+                <option value="9">级别:9</option>
+                <option value="10">级别:10</option>
+                <option value="11">级别:11</option>
+                <option value="12">级别:12</option>
+                <option value="13">级别:13</option>
+                <option value="14">级别:14</option>
+                <option value="15">级别:15</option>
+                <option value="16">级别:16</option>
+                <option value="17">级别:17</option>
+                <option value="18">级别:18</option>
+                <option value="19">级别:19</option>
+            </select>
+            (数字3-19之间)
+        </div>
+        <br>
+        <div>
+            <input type="button" value="地图放大一个级别" onclick="zoomIn();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="地图缩小一个级别" onclick="zoomOut();" />
+        </div>
+        <br>
+        <div>
+            <span>地图UI控制开关</span>
+            <p>
+            <select id="uiMode">
+                <option value="1">是否显示指南针</option>
+                <option value="2">是否支持用户多点缩放(双指)</option>
+                <option value="3">是否支持用户缩放(双击或双指单击)</option>
+                <option value="4">是否支持用户移动地图</option>
+                <option value="5">是否支持俯仰角</option>
+                <option value="6">是否支持旋转</option>
+                <option value="7">是否支持以手势中心点为轴进行旋转和缩放</option>
+                <option value="8">是否显式比例尺</option>
+                
+            </select>
+            <select id="isEnable">
+                <option value="1">打开</option>
+                <option value="0">关闭</option>
+            </select>
+            <p>
+            <input type="button" value="设置地图UI控制" onclick="setUISetting();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="添加标注" onclick="addMark();" />
+        </div>
+        <br>
+        <div>
+            <input type="button" value="清除标注" onclick="clearMarks();" />
+        </div>
+    </body>
+</html>

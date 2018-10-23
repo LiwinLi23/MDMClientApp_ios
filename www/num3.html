@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>index</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <style type="text/css">
+        input,span,label  {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-size: 150%;
+        }
+    </style>
+<script>
+	window.tmbOnload = function(){
+		var vl = document.getElementById("vl");
+		vl.innerHTML = localStorage.getItem("ls");
+	}
+	
+
+	function gobackIndex(){
+		tmbWindow.goBackTo("root");
+	}
+	
+	function goback(){
+//		tmbWindow.back();
+		tmbWindow.goBack();
+	}
+</script>
+</head>
+<body style="margin-top:20px">
+	<h2>这是跳转后的页面2</h2>
+	<font>获取到的localStorage值：</font><div id="vl"></div>
+	<br/>
+	<input type="button" value="回到上一个窗口" onclick="goback();"/><br/>
+	<input type="button" value="回到主页" onclick="gobackIndex();"/><br/>
+</body>
+</html>

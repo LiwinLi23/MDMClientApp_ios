@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PublicKey</key>
+	<string>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB</string>
+	<key>PrivateKey</key>
+	<string>MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALohuERMC6ls2jZB21JN49xjnIeLuGxgQZxECcGrplSAwJUxDaDXnGBdf7LozTs5Bqcw3ipKltw9zWP83T6qPdGzar8m7rGdH8oVofQsZJwr1dir0Wiv51ZbiyICEHPZoWJWdkWq7FXVlFEUNAyAVQ9NPrT87xABBetu7uMUQWK3AgMBAAECgYEAhYZHEAeVnhcOeznHQkXKHoH++mXLCUQMDTPp49tlWN18SgqEgkvqTF8Giqvi/ocsNKgj2CbmDlzviLkPZjLuYNM9xArSuRKAbAcJ4i2fEpwc7z/6NUxJp3WkrIHn3fqcg5mp79fFFHRxxLd6RsDaDZe5X5rO8MzrktRfKhVFDuECQQD3MAnojvk+RSg3dNpHc2pJJ4rLR9jId5nz3rmALdcs6qEUAJKXnMgI7xhekaCEpqdmojZshx9qd08vsZxXx0OPAkEAwMR0DPiT+qeK7L97oJDKwhESjWGkV7M8Ya7blTEZfJNkibqYPj8Y6mWM0elOVVkkiMC4LFTXGDGsWqwYIku6WQJAc7tOKFAoafs/JRfUyvdCoBWfaiWtXc6BiiiReW38/M6ttAvAlrOVBHnNUxmjqffNEMSJ7q4lC1fo/0+M/5wQCQJAA6BukoPmvNOEIJolqEqxFd+eWryYi/HaU/gnN3JaCWb4gELbdGhZfqd0c8qQ57gqoMwHawYZmeHtXTNZrOOB2QJADQKIAaD5Qqa9jL8Ph0EaW0HJ9Aa1Ruq2DTIP4s/HH2JOE2M+qcgPqBQA1PUEaDtErUDJiXlqVfTa9K/6JRql2g==</string>
+	<key>PartnerID</key>
+	<string>2088211220027902</string>
+	<key>SellerID</key>
+	<string>qianli@chanlytech.com</string>
+</dict>
+</plist>

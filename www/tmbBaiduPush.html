@@ -1,0 +1,65 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<title>百度云推送（tmbBaiduPush）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+	//无账号绑定(apikey绑定)推送服务
+	function bindPushService() {
+		// 为确保推送服务正常使用调用这个方法绑定服务
+		tmbBaiduPush.bindWithApiKey();
+
+	}
+	// 绑定账号回调
+	tmbBaiduPush.onBind = function(opID, dataType, data) {
+
+		var bindResult = eval('(' + data + ')');
+		var msg = "onBind errorCode=" + bindResult.errorCode + " appId="
+				+ bindResult.appId + " userId=" + bindResult.userId
+				+ " channelId=" + bindResult.channelId + " requestId="
+				+ bindResult.requestId;
+		document.getElementById('bindMsg').innerHTML = msg;
+		//tmbWindow.alert(msg);
+	}
+	// 解除绑定
+	function unbind() {
+		tmbBaiduPush.unBind();
+	}
+	// 解除绑定回调
+	tmbBaiduPush.onUnBind = function(opID, dataType, data) {
+
+		var bindResult = eval('(' + data + ')');
+		var msg = "onUnBind errorCode=" + bindResult.errorCode + " requestId="
+				+ bindResult.requestId;
+		document.getElementById('bindMsg').innerHTML = msg;
+		//tmbWindow.alert(msg);
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+
+	<div style="margin-top: 10px">
+		<a href="index.html" onclick="tmbBaiduPush.close();">GoBack</a>
+	</div>
+	<h2>百度云推送（tmbBaiduPush）</h2>
+	<div align="center">
+		<input type="button" value="无账号绑定"
+			style="margin-top: 15px; font-size: 120%;"
+			onclick="bindPushService();" />
+	</div>
+	<div align="center">
+		<input type="button" value="解除绑定"
+			style="margin-top: 15px; font-size: 120%;" onclick="unbind();" />
+	</div>
+	<div align="center" id="bindMsg"></div>
+
+</body>
+</html>

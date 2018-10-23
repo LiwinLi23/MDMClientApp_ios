@@ -1,0 +1,80 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网络检测（tmbNet）</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+    
+    function getinfoCallBack(data){
+        tmbLog.sendLog(data);  //打印回调返回信息
+    }
+    
+    function initTrans(){
+        
+        //如果不调用该接口，或者该接口调用失败，均使用默认值完成下一步的语音转写。
+        tmbMobileVoiceTranscription.login("abc","1234","51aed671");
+
+        //注册登录返回的错误码回调
+        tmbMobileVoiceTranscription.getLoginErrorCode();
+        tmbMobileVoiceTranscription.cbgetLoginErrorCode= getinfoCallBack;
+        
+        //注册登录返回的错误描述回调
+        tmbMobileVoiceTranscription.getLoginErrorDesc();
+        tmbMobileVoiceTranscription.cbgetLoginErrorDesc = getinfoCallBack;
+        
+        //初始化，此接口必须调用且在login后调用
+        tmbMobileVoiceTranscription.InitSpeechRecognizer("51aed671"，"10")；
+        
+        //若不调用此接口，则使用默认的值
+        tmbMobileVoiceTranscription.setRecognizerParameter("sms"，"18000","0");
+    }
+
+    function startTrans(){
+
+        initTrans();
+        tmbMobileVoiceTranscription.startTranscription();
+        
+        //注册转写回调
+        tmbMobileVoiceTranscription.getRegResult();
+        tmbMobileVoiceTranscription.cbgetRegResult = getinfoCallBack;
+        
+        //注册转写错误码回调
+        tmbMobileVoiceTranscription.getTransErrorCode();
+        tmbMobileVoiceTranscription.cbgetTransErrorCode= getinfoCallBack;
+        
+        //注册转写错误描述回调
+        tmbMobileVoiceTranscription.getTransErrorDesc();
+        tmbMobileVoiceTranscription.cbgetTransErrorDesc= getinfoCallBack;
+    }
+    
+    function stopTrans(){
+        tmbMobileVoiceTranscription.stopTranscription();
+    }
+    
+    function cancelTrans(){
+        tmbMobileVoiceTranscription.cancelTranscription();
+    }
+    </script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>语音转文字（tmbMobileVoiceTranscription）</h2>
+	<div>
+		<input type="button" value="启动语音转换" onclick="startTrans();">
+	</div>
+	<div>
+		<input type="button" value="停止语音转换" onclick="stopTrans();">
+	</div>
+	<div>
+		<input type="button" value="取消语音转换" onclick="cancelTrans();">
+	</div>
+</body>
+</html>

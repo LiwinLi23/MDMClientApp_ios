@@ -1,0 +1,69 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<title>支付宝快捷支付（tmbAlipay）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+    function getTradeNo(len) {
+        　　len = len || 32;
+        　　var $chars = '0123456789ABCDEFGHJKMNOPQRSTUVWXYZ';
+        　　var maxPos = $chars.length;
+        　　var pwd = '';
+        　　for (i = 0; i < len; i++) {
+            　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+            　　}
+        　　return pwd;
+    }
+    var userId = "";
+    var tradeNo = ""
+    //回调
+    function onResult(data) {
+        tmbWindow.alert("支付完成:" + data);
+    }
+	// 登录
+	function login() {
+        tmbAliPay.onResult = onResult;
+		tmbAliPay.login(userId);
+	}
+	
+	
+	// 支付
+	function pay() {
+        tradeNo = getTradeNo(8);
+        var orderJson =  '{"totalFee" : "0.01", "tradeNo" : "'+tradeNo+'","subject" : "山寨苹果6","body" : "山寨的苹果6手机","notifyUrl" : "http://www.xxx.com","payTimeout" : "15m","isSandMode" : "0","showUrl" : "http://TMDM.temobi.com"}';
+        tmbAliPay.onResult = onResult;
+		tmbAliPay.pay(orderJson);
+	}
+var secretkeyJson = '{"PublicKey" : "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB", "PrivateKey" : "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANC0lU3yej7MOtKRxujbD+4kagCSTOg73JtxFhkmnokPWrS0a6sSEdFuYCdRd93QzShJvtdXsgFqan/jDN56BFcuYjm2z/THE/qi5Vay5LO7RMCZveJATzLEgHXAEqYmaYWVquuhsGKKcsy9Du/4ke5/VDkwKoYMXsKxDN3ssxmjAgMBAAECgYAoaW8norYNBtq0/0k2uYRCJoboCWwe48h5yNHwmMvF2lVD/FOE0oDkvqybsGi3aMDw9iaf5/kt0P9COCK7yYChT1U9e0KcMQkZQkG3a60HgOApHMGHtr5WUgmG7hVU1H/aJEh1EiDngtTqkCv4FFqdPT7NhLRsnhgC+ZY3H2cA0QJBAPNt1ab5W6c8RqI6r2n9b2ObF+ZG+YW0tPfChln4IzjgMNlolqQgV4vMXjSsdytlMr5F0zOM+AiAeiG8sT9Tag0CQQDbe7KGsqkHNH6jCuMM8Gbhkxr8HbFodN3l697dUqfZOnCxZM0XQ5fZuWgtJmP53WuB31a0jq4zi6G78/fKVxZvAkEAmWR/uhztbT9lPvr96CsEEt77O2dD+sX5NxqD8JOVFlTnU0g9jKS4peYdAtIeseCuDgoP4S8WaL0UuMefZUkZzQJAVQY6Rov3ht8DH84b3utSL5h5H6mxDDIZs/QHxd07QJ+vAEl4WcbJkIKOpM72c9keyJToVdHgEf/Ji7IbD7tk6QJAXJLEGH7PuvDJj4xTpSiSnxRtDmdrURFGYXT0ObV+DOqbrb3ZCVw72bYYkAsGPSxlSWH3+xK9wKA4hLpe4iaC9w==","PartnerID" : "2088911537169183","SellerID" : "ydhlwzw@wasu.com"}';
+    function setAlipaySecretKey() {
+        tmbAliPay.setAlipaySecretKey(secretkeyJson);
+    }
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+    <div style="margin-top: 10px">
+        <a href="index.html">GoBack</a>
+    </div>
+	<h2>支付宝快捷支付（tmbAlipay）</h2>
+    
+	<div>
+		<input type="button" value="登录支付宝" onclick="login();" />
+	</div>
+	<div>
+		<input type="button" value="支付" onclick="pay();" />
+	</div>
+    <div>
+        <input type="button" value="设置支付密钥" onclick="setAlipaySecretKey();" />
+    </div>
+	<br>
+
+</body>
+</html>

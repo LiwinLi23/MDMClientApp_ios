@@ -1,0 +1,206 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<title>文件管理（tmbFileMgr）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+input,span {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+	//创建目录
+	function createdir() {
+		//操作码
+		var opCode = 2;
+		var path = "box://data/createdir";
+		tmbFileMgr.createDir(opCode, path);
+		//创建目录回调
+		tmbFileMgr.cbCreateDir = function(opId, dataType, data) {
+			if (dataType == 2 && data == 0) {
+				tmbWindow.alert("创建目录成功");
+			} else {
+				tmbWindow.alert("创建目录失败");
+			}
+		}
+	}
+	// 创建一个空文件
+	// 创建空文件成功后默认打开文件，打开模式为可读可写，可直接读取文件或者写入数据到文件
+	function createfile() {
+		//操作码
+		var opCode = 1;
+		var filepath = "box://data/createfile.txt";
+		tmbFileMgr.createFile(opCode, filepath);
+		//创建文件回调
+		tmbFileMgr.cbCreateFile = function(opId, dataType, data) {
+			if (dataType == 2 && data == 0) {
+				tmbWindow.alert("创建文件成功");
+			} else {
+				tmbWindow.alert("创建文件失败");
+			}
+		}
+	}
+	// 删除文件
+	function delfile() {
+		var delpath = "box://data/createfile.txt";
+		tmbFileMgr.deleteFileByPath(delpath);
+		//打开文件回调
+		tmbFileMgr.cbDeleteFileByPath = function(opId, dataType, data) {
+			if (dataType == 2 && data == 0) {
+				tmbWindow.alert("删除文件成功");
+			} else {
+				tmbWindow.alert("删除文件失败");
+			}
+		}
+	}
+	// 检查文件是否存在
+	function isFileExist() {
+		var filepath = 'box://data/createfile.txt';
+		tmbFileMgr.isFileExistByPath(filepath);
+		//打开文件回调
+		tmbFileMgr.cbIsFileExistByPath = function(opId, dataType, data) {
+			if (dataType == 2) {
+				if (data == 1) {
+					tmbWindow.alert("文件存在");
+				} else if (data == 0) {
+					tmbWindow.alert("文件不存在");
+				}
+			}
+		}
+	}
+	// 读取文件内容
+	function readfile() {
+		//操作码
+		var opCode = 1;
+		//假设createfile.txt已由tmbFileMgr.createFile创建
+		var path = "box://data/createfile.txt";
+		//获取打开文件的方式
+		var openMode = document.getElementById("openMode").value;
+		var mode = parseInt(openMode);
+		//获取读取文件的长度
+		var readLen = document.getElementById("readLen").value;
+		var len = parseInt(readLen);
+		//1.读取文件之前需要先打开文件,1为只读,2为可读可写
+		tmbFileMgr.openFile(opCode, path, mode);
+		//2.打开文件回调
+		tmbFileMgr.cbOpenFile = function(opId, dataType, data) {
+			//tmbWindow.alert(data);
+			if (dataType == 2 && data == 0) {
+				//tmbWindow.alert("打开文件成功");
+				//3.打开文件成功之后读取文件内容，根据打开文件的opCode读取
+				tmbFileMgr.readFile(opCode, len);
+			} else {
+				tmbWindow.alert("打开文件失败");
+			}
+		}
+		//4.读取文件回调
+		tmbFileMgr.cbReadFile = function(opId, dataType, data) {
+			if (dataType == 0) {
+				tmbWindow.alert(data);
+			}
+			//6.使用完毕关闭文件
+			tmbFileMgr.closeFile(opCode);
+		}
+	}
+
+	// 写文件
+	function writefile() {
+		//操作码
+		var opCode = 1;
+		//假设createfile.txt已由tmbFileMgr.createFile创建
+		var path = "box://data/createfile.txt";
+		//获取打开文件的方式
+		var openMode = document.getElementById("openMode").value;
+		var opmode = parseInt(openMode);
+		//获取写入文件的方式
+		var writeMode = document.getElementById("writeMode").value;
+		var wmode = parseInt(writeMode);
+		//获取写入文件的内容
+		var writeContent = document.getElementById("writeContent").value;
+		//1.写文件之前需要先打开文件,1为只读,2为可读可写
+		tmbFileMgr.openFile(opCode, path, opmode);
+		//2.打开文件回调
+		tmbFileMgr.cbOpenFile = function(opId, dataType, data) {
+			if (dataType == 2 && data == 0) {
+				//tmbWindow.alert("打开文件成功");
+				//3.写入数据到文件中，根据打开文件的opCode写入
+				tmbFileMgr.writeFile(opCode, wmode, writeContent);
+			} else {
+				tmbWindow.alert("打开文件失败");
+			}
+		}
+		//4.写入文件回调
+		tmbFileMgr.cbWriteFile = function(opId, dataType, data) {
+			if (dataType == 0) {
+				tmbWindow.alert("写入文件的内容：" + data);
+			}
+			//6.使用完毕关闭文件
+			tmbFileMgr.closeFile(opCode);
+		}
+
+	}
+
+	var url="openfileby3d.html";
+	function openfiletoothe(){
+	
+	tmbWindow.open("openfileby3d", "0", url, "1", "", "", "7", "300");
+	}
+</script>
+<body scroll="no" id="docs">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>文件管理（tmbFileMgr）</h2>
+	<div>
+		<input type="button" value="创建目录" onclick="createdir();" />
+	</div>
+	<div>
+		<input type="button" value="创建文件" onclick="createfile();" />
+	</div>
+	<div>
+		<input type="button" value="删除文件" onclick="delfile();" />
+	</div>
+	<div>
+		<input type="button" value="文件是否存在" onclick="isFileExist();" />
+	</div>
+	<div>
+		<span>填写打开文件模式（1为只读，2为可读可写）</span><br> <input type="text"
+			value="1" id="openMode" />
+	</div>
+	<div>
+		<span>填写读取文件的长度（-1或者比文件长度长的整数将读取全部内容，大于0的整数为指定长度）</span><br> <input
+			type="text" value="-1" id="readLen" />
+	</div>
+	<div>
+		<span>填写要写入文件的内容</span><br> <input type="text"
+			value="这里输入要写入文件的内容" id="writeContent" />
+	</div>
+	<div>
+		<span>填写写入文件模式（0为覆盖，1为追加）</span><br> <input type="text" value="0"
+			id="writeMode" />
+	</div>
+	<div>
+		<input type="button" value="读取文件" onclick="readfile();" />
+	</div>
+	<div>
+		<input type="button" value="写文件" onclick="writefile();" />
+	</div>
+	
+
+	       <div>
+            分享内容类型： <select id="contentType" onchange="setContentType();">
+                <option value="1">文字</option>
+                <option value="2">图片</option>
+                <option value="3">音乐</option>
+                <option value="4">视频</option>
+            </select> (数字1-4)
+        </div>
+	<div>
+		<input type="button" value="通过第三方APP打开文件界面" onclick="openfiletoothe();" />
+	</div>
+
+</body>
+</html>

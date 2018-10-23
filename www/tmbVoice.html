@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>tmbVoice（语音听写）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<style type="text/css">
+div,input {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+</style>
+<script>
+    // 会话人ID
+    var speechNameId = 0;
+    // 音量
+    var volume = 50;
+    // 获取音量
+    function setVolume() {
+        var type = document.getElementById("setVolume").value;
+        volume = Number(type);
+    }
+    // 获取会话人ID
+    function setspeechNameId() {
+        var type = document.getElementById("speechNameId").value;
+        speechNameId = Number(type);
+    }
+	function cbTransLate(data) {
+		tmbWindow.alert(data);
+	}
+    function cbProgress(value) {
+    
+    }
+    function startSpeech(){
+        //获取会话内容
+        var speechContent = document.getElementById("speechContent").value;
+        // 第一个参数为会话内容
+        // 第二个参数为会话发音人(0-23)
+        // 第三个参数为会话音量(0-100)
+        // 第四个参数为会话采用率(目前支持16000，8000)
+        var config = '{"voiceName":'+speechNameId+',"volume":'+volume+',"sampleRate":16000}';
+        tmbVoice.cbProgress = cbProgress;
+        tmbVoice.startSpeech(speechContent,config);
+    }
+    function pauseSpeech(){
+        tmbVoice.pauseSpeech();
+    }
+    function resumeSpeech(){
+        tmbVoice.resumeSpeech();
+    }
+    function cancelSpeech(){
+        tmbVoice.cancelSpeech();
+    }
+	function startSpeak(){
+		tmbVoice.cbTransLate = cbTransLate;
+		tmbVoice.startSpeak();
+	}
+	function startSpeakDialog(){
+		tmbVoice.cbTransLate = cbTransLate;
+        tmbVoice.startSpeakDialog()
+	}
+	function stopSpeak(){
+        tmbVoice.stopSpeak()
+	}
+    function cancelSpeak(){
+        tmbVoice.cancelSpeak()
+	}
+</script>
+</head>
+<body style="margin-top:20px">
+    <div style="margin-top: 10px">
+        <a href="index.html">GoBack</a>
+    </div>
+    <h2>tmbVoice（语音听写接口）</h2>
+    <div>
+        语音类型: <select id="speechNameId" onchange="setspeechNameId();">
+            <option value="0">女普通话(小燕)</option>
+            <option value="1">男普通话(小宇)</option>
+            <option value="2">女英语(Catherine)</option>
+            <option value="3">男英语(henry)</option>
+            <option value="4">女英语(Mary)</option>
+            <option value="5">女普通话(小研)</option>
+            <option value="6">女普通话(小琪)</option>
+            <option value="7">男普通话(小峰)</option>
+            <option value="8">女粤语(小梅)</option>
+            <option value="9">台湾普通话(小莉)</option>
+            <option value="10">女四川(小蓉)</option>
+            <option value="11">女东北话(小芸)</option>
+            <option value="12">男河南话(小坤)</option>
+            <option value="13">男湖南话(小强)</option>
+            <option value="14">女陕西话(小莹)</option>
+            <option value="15">男童普(小新)</option>
+            <option value="16">女童普(楠楠)</option>
+            <option value="17">老男普(老孙)</option>
+            </select> <br /><br />
+        音量大小: <select id="setVolume" onchange="setVolume();">
+            <option value="0">静音</option>
+            <option value="10">10%</option>
+            <option value="20">20%</option>
+            <option value="30">30%</option>
+            <option value="40">40%</option>
+            <option value="50" selected>50%</option>
+            <option value="60">60%</option>
+            <option value="70">70%</option>
+            <option value="80">80%</option>
+            <option value="90">90%</option>
+            <option value="100">最大</option>
+            </select> <br />
+    </div>
+    <div>
+        <span>填写会话内容</span><br>
+        <input type="text" value="欢迎使用融创天下MDM打包平台,深圳市融创天下科技有限公司,中国领先的移动互联网平台及服务提供商,专注提供移动多媒体平台,解决方案和支撑服务." style="width:300px" id="speechContent" />
+        <br />
+        <input type="button" value="开始会话" onclick="startSpeech();" />
+        <input type="button" value="暂停会话" onclick="pauseSpeech();" />
+        <input type="button" value="恢复会话" onclick="resumeSpeech();" />
+        <input type="button" value="取消会话" onclick="cancelSpeech();" />
+    </div>
+    <input type="button" value="开始语音听写不带界面" onclick="startSpeak();" />
+    <br />
+	<input type="button" value="开始语音听写带界面" onclick="startSpeakDialog();" />
+    <br />
+	<input type="button" value="停止语音听写" onclick="stopSpeak();" />
+    <br />
+	 <input type="button" value="取消语音听写" onclick="cancelSpeak();" />
+    <br />
+</body>
+</html>

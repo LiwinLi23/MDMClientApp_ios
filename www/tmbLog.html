@@ -1,0 +1,30 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>日志相关（tmbLog）</title>
+<style type="text/css">
+div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+    window.tmbOnload = function(){
+        tmbLog.openLog("lihualin",true);
+    }
+	function sendlog() {
+		tmbLog.sendLog("我是LOG，请仔细查阅");
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>日志相关（tmbLog）</h2>
+	<div>
+		<input type="button" value="发送LOG" onclick="sendlog();">
+	</div>
+</body>
+</html>

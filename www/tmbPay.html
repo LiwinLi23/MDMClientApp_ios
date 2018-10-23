@@ -1,0 +1,99 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>移动动漫基地支付（tmbPay）</title>
+<style type="text/css">
+input,span {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	//强联网支付
+	function cmccPay() {
+		//渠道ID
+		var channelId = "12168728",
+		//内容ID 必须单集的contentCode而不能使整部的contentCode
+		contentCode = "300000346001",
+		//1商品内容类型彩信、短信、内容包
+		//2一般内容，如漫画、动画、声优等
+		//3节点,暂时没有
+		//4套餐
+		//101 AP自有业务
+		contentType = "101",
+		//内容类型，漫画为comic, 主题：theme, 动画: animation
+		seriesType = "comic",
+		//漫画清晰度normal(流畅),sd(标清),hd(高清) 动画：wap_sd，wap_normal
+		definition = "normal",
+		//作品的ProductId用于订购
+		productId = "MDSP0000000000",
+		//观看类型，漫画在线观看为comicOnlinePlay；主题：ThemeDownload;动画：videoOnlinePlay
+		way = "comicOnlinePlay",
+		//当前分页数，默认值为1
+		pageNum = "1",
+		//当前分页中的记录数，默认值为10
+		pageSize = "10";
+		tmbPay.chinaMobilePay(channelId, contentCode, contentType, seriesType,
+				definition, productId, way, pageNum, pageSize);
+		//强联网支付回调
+		tmbPay.cbCMCCBillingFinish = function(resultCode, resultJSON) {
+			tmbWindow.alert(resultJSON);
+			// 102或者104是订购成功
+			if (resultCode == '102' || resultCode == '104') {
+				//订购成功
+				tmbWindow.alert("订购成功");
+			}
+			//401是取消订购
+			else if (resultCode == '401') {
+				tmbWindow.alert("订购取消");
+			}
+			//其他为失败
+			else {
+				var btns = new Array();
+				btns[1] = "好吧";
+				tmbWindow.confirm("温馨提示", "订购失败了，请稍后重试", btns);
+			}
+		}
+	}
+	//弱联网支付
+	function smsPay() {
+		//内容ID 必须单集的contentCode而不能使整部的contentCode
+		var contentCode = "300000346001";
+		tmbPay.chinaMobilePay(contentCode);
+		tmbPay.cbSMSBillingFinish = function(resultCode, resultJSON) {
+			tmbWindow.alert(resultJSON);
+			// 102或者104是订购成功
+			if (resultCode == '102' || resultCode == '104') {
+				//订购成功
+				tmbWindow.alert("订购成功");
+			}
+			//401是取消订购
+			else if (resultCode == '401') {
+				tmbWindow.alert("订购取消");
+			}
+			//其他为失败
+			else {
+				var btns = new Array();
+				btns[1] = "好吧";
+				tmbWindow.confirm("温馨提示", "订购失败了，请稍后重试", btns);
+			}
+		}
+
+	}
+</script>
+<body scroll="yes" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>移动动漫基地支付（tmbPay）</h2>
+	<div>
+		<input type="button" value="强联网支付" onclick="cmccPay();">
+	</div>
+	<div>
+		<input type="button" value="弱联网支付" onclick="smsPay();">
+	</div>
+
+</body>
+</html>

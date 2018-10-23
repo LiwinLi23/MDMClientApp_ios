@@ -1,0 +1,38 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>二维码扫描（tmbScanner）</title>
+<style type="text/css">
+div {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	function ScannerSuccessCallBack(opCode, dataType, data) {
+
+		if (dataType == 1) {
+			var obj = JSON.parse(data);
+            var type = decodeURI(obj.type);
+			var code = decodeURI(obj.code);
+			var qrcodeInfo = code.replace(/%3A/g, ':').replace(/%2C/g, ',');
+			tmbWindow.alert("二维码扫描结果 Type:" + type + " Info:" + qrcodeInfo);
+		}
+	}
+
+	window.tmbOnload = function() {
+		tmbScanner.cbOpen = ScannerSuccessCallBack;
+	}
+</script>
+<body scroll="no" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>二维码扫描（tmbScanner）</h2>
+	<div>
+		<input type="button" value="扫描商品条形码" onclick="tmbScanner.open();" />
+	</div>
+</body>
+</html>

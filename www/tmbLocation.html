@@ -1,0 +1,87 @@
+﻿<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>百度定位功能（tmbLocation）</title>
+<style type="text/css">
+div,input,label {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 150%
+}
+</style>
+</head>
+<script type="text/javascript">
+	// 启动定位
+	function openLocation() {
+		tmbLocation.openLocation();
+		//启动定位成功回调
+		tmbLocation.cbOpenLocation = function(opCode, dataType, data) {
+			if (data == 0) {
+				tmbWindow.alert("定位打开成功！");
+			} else if (data == 1) {
+				tmbWindow.alert("定位打开失败！");
+			}
+		}
+		//定位结果回调
+		tmbLocation.onChange = function(inLatitude, inLongitude) {
+			//定位结果数据为JSON
+            document.getElementById('longitude').innerHTML = inLongitude;
+            document.getElementById('latitude').innerHTML = inLatitude;
+		}
+	}
+	//关闭定位
+	function closeLocation() {
+		tmbLocation.closeLocation();
+	}
+	//根据经纬度检索具体地址
+	function getAddress() {
+		var lon = document.getElementById('lon').value;
+		var lat = document.getElementById('lat').value;
+		var longitude = parseFloat(lon);
+		var latitude = parseFloat(lat);
+		tmbLocation.getAddress(latitude, longitude);
+		tmbLocation.cbGetAddress = function(opCode, dataType, data) {
+			tmbWindow.alert(data);
+		}
+	}
+	//根据具体地址检索经纬度
+	function getLonLat() {
+		var incity = document.getElementById('incity').value;
+		var inaddress = document.getElementById('inaddress').value;
+		tmbLocation.getLonLat(incity, inaddress);
+		tmbLocation.cbGetLonLat = function(opCode, dataType, data) {
+			var result = eval('(' + data + ')');
+			var longitude = result.longitude + "";
+			var latitude = result.latitude + "";
+			tmbWindow.alert("经度：" + longitude + "，纬度：" + latitude);
+		}
+	}
+</script>
+<body scroll="yes" id="docs" style="margin-top:20px">
+	<div style="margin-top: 10px">
+		<a href="index.html">GoBack</a>
+	</div>
+	<h2>百度定位功能（tmbLocation）</h2>
+	<div>
+		<input type="button" value="打开百度定位" onClick="openLocation();" />
+	</div>
+	<div>
+		<input type="button" value="关闭百度定位" onClick="closeLocation();" />
+	</div>
+	<label>当前经度:</label>
+	<div id="longitude" style="height: 20px"></div>
+	<label>当前纬度:</label>
+	<div id="latitude" style="height: 20px"></div>
+
+	<div>
+		<span>经度：</span><input type="text" value="104.061471" id="lon" />
+	</div>
+	<div>
+		<span>纬度：</span><input type="text" value="30.592614" id="lat" />
+	</div>
+	<div>
+		<input type="button" value="查询具体地址" onClick="getAddress();" />
+	</div>
+
+</body>
+</html>

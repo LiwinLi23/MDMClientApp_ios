@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class='um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0'/>
+<meta content="telephone=yes" name="format-detection" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes">
+	<link rel="stylesheet" type="text/css" href="http://xj.jk.wasu.com:8080/jike/css/jike/public.css" />
+	<link rel="stylesheet" type="text/css" href="http://xj.jk.wasu.com:8080/jike/css/jike/android.css" />
+	<link rel="stylesheet" type="text/css" href="http://xj.jk.wasu.com:8080/jike/css/jike/mfilter.css" />
+	<link rel="stylesheet" type="text/css" href="http://xj.jk.wasu.com:8080/jike/css/jike/fh.css" />
+	<link rel="stylesheet" type="text/css" href="http://xj.jk.wasu.com:8080/jike/css/jike/base.css" />
+	<link rel="stylesheet" href="http://xj.jk.wasu.com:8080/jike/css/base.css"/>
+	<link rel="stylesheet" href="http://xj.jk.wasu.com:8080/jike/css/transition.css"/>
+<script type='text/javascript'>
+window.tmbOnload = function(){
+	//判断字符串是否为空
+		function isEmpty(str){
+			return (str == null || str == "")?true:false;
+		};
+		
+		function isNotEmpty(str){
+			return !isEmpty(str);
+		};
+	function getDeviceInfo(){
+		//获取设备信息
+		tmbDevice.cbGetInfo = function(opCode,dataType,data){
+			
+			var obj = JSON.parse(data),
+				os = obj.os,
+				manufacturer = obj.manufacturer,
+				blueTooth = obj.blueTooth,
+				wifi = obj.wifi,
+				camera = obj.camera,
+				gps = obj.gps,
+				gprs = obj.gprs,
+				imei = obj.imei,
+				deviceToken = obj.deviceToken,
+				deviceType = obj.deviceType,
+				connectStatus = obj.connectStatus,
+				restDiskSize = obj.restDiskSize,
+				version = obj.version,
+				screenWidth = obj.width,
+				screenHeight = obj.height,
+				simSerialNum = obj.simSerialNum,
+				versionName = obj.versionName,
+				c_id = obj.c_id;
+			
+			if(!isEmpty(os)){
+				localStorage.setItem("client_os",os);
+			}
+			if(!isEmpty(manufacturer)){
+				localStorage.setItem("client_manufacturer",manufacturer);
+			}
+			if(!isEmpty(blueTooth)){
+				localStorage.setItem("client_blueTooth",blueTooth);
+			}
+			if(!isEmpty(wifi)){
+				localStorage.setItem("client_wifi",wifi);
+			}
+			if(!isEmpty(camera)){
+				localStorage.setItem("client_camera",camera);
+			}
+			if(!isEmpty(gps)){
+				localStorage.setItem("client_gps",gps);
+			}
+			if(!isEmpty(gprs)){
+				localStorage.setItem("client_gps",gprs);
+			}
+			if(!isEmpty(imei)){
+				localStorage.setItem("client_imei",imei);
+			}
+			if(!isEmpty(deviceToken)){
+				localStorage.setItem("client_deviceToken",deviceToken);
+			}
+			if(!isEmpty(deviceType)){
+				localStorage.setItem("client_deviceType",deviceType);
+			}
+			if(!isEmpty(connectStatus)){
+				localStorage.setItem("client_connectStatus",connectStatus);
+			}
+			if(!isEmpty(connectStatus)){
+				localStorage.setItem("client_restDiskSize",restDiskSize);
+			}
+			if(isNotEmpty(version)){
+				localStorage.setItem("client_version",version);
+			}
+			if(!isEmpty(screenWidth)){
+				localStorage.setItem("client_screenWidth",screenWidth);
+			};
+			if(!isEmpty(screenHeight)){
+				localStorage.setItem("client_screenHeight",screenHeight);
+			}
+			if(isNotEmpty(simSerialNum)){
+				localStorage.setItem("client_simSerialNum",simSerialNum);
+			}
+			if(isNotEmpty(versionName)){
+				localStorage.setItem("client_versionName",versionName);
+			}
+			if(isNotEmpty(c_id)){
+				localStorage.setItem("client_c_id",c_id);
+			}
+			
+		};
+		
+		tmbDevice.getInfo('1');//操作系统
+		tmbDevice.getInfo('2');//制造商
+	/*	IOS 版本时，这几项不能要会出错
+		tmbDevice.getInfo('4');//是否支持蓝牙
+		tmbDevice.getInfo('5');//是否支持Wifi
+		tmbDevice.getInfo('6');//是否有摄像头
+		tmbDevice.getInfo('7');//是否支持GPS
+		tmbDevice.getInfo('8');//当前移动网络是否可用
+		//*/
+		tmbDevice.getInfo('10');//IMEI
+		tmbDevice.getInfo('11');//推送时 唯一Id deviceToken
+		tmbDevice.getInfo('12');//设备类型 diviceType 0手机 1平板 2 ipodTouch(IOS设备)
+		tmbDevice.getInfo('13');//联网类型
+		tmbDevice.getInfo('14');//设备存储剩余空间 restDiskSize
+		tmbDevice.getInfo("15");//软件内部版本号
+		tmbDevice.getInfo('16');//分辨率宽度
+		tmbDevice.getInfo('17');//分辨率高度
+		tmbDevice.getInfo('18');//手机SIM卡序列号
+		tmbDevice.getInfo('19');//软件外部版本号
+		tmbDevice.getInfo('20');//渠道ID 配置文件config.property中key为"c_id"的value
+		
+	}
+	var initCheckNetWorkkey = "0";
+	function initCheckNetWork(){
+		
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function(){
+		  if (xmlhttp.readyState==4 && xmlhttp.status==200){
+		   initCheckNetWorkkey = "1";
+		  }else if(xmlhttp.status==404){
+		  		tmbWindow.cbConfirm = function(opId,dataType,data){
+							if(data==0){
+								tmbWindow.exitApp();
+							}
+					}
+					tmbWindow.confirm("系统提示","网络异常!请检查网络后重试!",["退出"]);
+		  }
+		}
+		
+		xmlhttp.open("GET","http://xj.jk.wasu.com:8080/jike/index.html?timestamp="+new Date().getTime(),true);
+		xmlhttp.send();
+		setTimeout(function(){
+			if(initCheckNetWorkkey!="1"){
+				tmbWindow.alert("系统提示","系统检测到您未连接网络，自动进入脱机离线缓存页面!","确定");
+				createOffCachePage();
+			}
+			initCheckNetWorkkey = "0";
+		},20000);
+		
+	}
+	getDeviceInfo();
+	initCheckNetWork();
+	
+	function createOffCachePage(){
+		var dom = document.getElementById("offcache_tp");
+		document.body.innerHTML = dom.innerHTML;
+		var videos = getLocalVideos();
+		var offulDom = document.getElementById("offul");
+		
+		if(videos!=null&&videos.length>0){
+			var lisHtml = "";
+			var videosLength = videos.length;
+			for(var i=0;i<videosLength;i++){
+				lisHtml = lisHtml + "<li onclick='tmbPlayer.play(\""+videos[i].savePath+"\")'><span>"+videos[i].title+"</span><p>播放</p></li>";
+			}
+			offulDom.innerHTML =	lisHtml;
+		}else{
+			offulDom.innerHTML = "暂无已下载完成的离线视频，要观看视频，请连接网络后重启客户端再试!";
+			
+		}
+		
+		
+		function getLocalVideos(){
+			var queStr = localStorage.getItem("downloadQue");
+			if(queStr === null){
+				return null;
+			}else{
+				var queJson = JSON.parse(queStr);
+				var toDownIndex = queJson.queInfo.toDownIndex;
+				var videos = queJson.que.slice(0,toDownIndex);
+				return videos;
+			}
+		}
+	}
+	
+	function initCheckRootPic(){
+		tmbFileMgr.cbIsFileExistByPath = function(opId,dataType,data){
+			if(dataType==2){
+				if(data==1)
+					tmbWindow.alert("文件存在");
+				if(data==0)
+					tmbWindow.alert("文件不存在");
+			}
+		}
+		var imgCache = localStorage.getItem("initRootImgJSON");
+		//tmbFileMgr.isFileExistByPath("box://data/config/file.txt");
+		if(imgCache!=null){
+			var imgObj = JSON.parse(imgCache);
+			var url = imgObj.picPath;
+			rootImgUrl = url;
+			var rootImgDom = document.getElementById("rootimg");
+			if(rootImgDom!=null){
+				rootImgDom.children[0].src=url;
+			}else{
+				var rootImgDom = document.createElement("div");
+				rootImgDom.id="rootimg";
+				rootImgDom.innerHTML = '<img src="'+url+'" style="width:100%;height:100%"/>';
+				rootImgDom.style.position = "fixed";
+				rootImgDom.style.top = "0";
+				rootImgDom.style.left = "0";
+				rootImgDom.style.width = "100%";
+				rootImgDom.style.height = "100%";
+				rootImgDom.style.zIndex = "1000";
+				tmbFileMgr.cbGetFileRealPath = function (opId,dataType,data){
+					rootImgDom.innerHTML = '<img src="'+data+'" style="width:100%;height:100%"/>';
+					document.body.appendChild(rootImgDom);
+				}
+				tmbFileMgr.getFileRealPath(url);
+				
+			}
+		}else{
+			var rootImgDom = document.getElementById("rootimg");
+			var url = "images/root.jpg";
+			if(rootImgDom!=null){
+					rootImgDom.children[0].src=url;
+			}else{
+				var rootImgDom = document.createElement("div");
+				rootImgDom.id="rootimg";
+				rootImgDom.style.position = "fixed";
+				rootImgDom.style.top = "0";
+				rootImgDom.style.left = "0";
+				rootImgDom.style.width = "100%";
+				rootImgDom.style.height = "100%";
+				rootImgDom.style.zIndex = "1000";
+				rootImgDom.innerHTML = '<img src="'+url+'" style="width:100%;height:100%">';
+				if(document.body!=null){
+					document.body.appendChild(rootImgDom);
+				}else{
+					setTimeout(function(){
+						document.body.appendChild(rootImgDom);
+						},50);
+				}
+			}
+		}
+	}
+	initCheckRootPic();
+}
+	</script>
+	
+	
+	
+	
+	<script type="text/javascript" src="http://xj.jk.wasu.com:8080/jike/js/lib/require.js" data-main="http://xj.jk.wasu.com:8080/jike/js/stage/scene_main" defer async="true"></script>
+	
+	
+</head>
+<body style="background:#FFF;">
+	<div data-role="header" id="mainheader" style="position:fixed;top:20px;height:50px;z-index:99;width:100%">
+		<div id="index_head" style="display:none;">
+		</div>
+		<div id="nologo_head" style="display:none;">
+		</div>
+		<div id="search_head" style="display:none;">
+		</div>
+	</div>
+	<!-- 导航区 -->
+	<div id="_page_container_" data-role="container">
+		
+	<script type="text/template" id="offcache_tp">
+	<style>
+*{
+	box-sizing:border-box;
+	padding:0;
+	margin:0;
+}
+
+.offmain .off-title-top{
+	text-align:center;
+	height:49px;
+	border-bottom: 1px solid #B3B3B3;
+	font:20px/42px "Microsoft YaHei",SimHei,helvetica,arial,verdana,tahoma,sans-serif;
+}
+
+.offmain .off-title{
+text-align:center;
+margin-left:-35px;
+height: 49px;
+color: red;
+}
+
+.offmain .off-back{
+float:left;
+margin-left:8px;
+height: 49px;
+color: red;
+}
+
+.offmain ul{
+	list-style:none;
+}
+
+.offmain ul li{
+	height:50px;
+	border-bottom: 1px solid #E0D9D9;
+	line-height:50px;
+}
+
+.offmain ul li span{
+	float:left;
+	width:78%;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	left:0px;
+	font-size:16px;
+}
+
+.offmain ul li p{
+	width:20%;
+	float:right;
+	text-align: center;
+	border:1px solid #E0D9D9;
+	line-height: 30px;
+	margin: 9px 0px;
+	border-radius: 15px;
+	font-size:12px;
+}
+
+</style>
+<div class="offmain" style="margin-top:20px;">
+	<div class="off-title-top">
+		<span class="off-back" onclick="window.location.reload(true);">首页</span> <span class="off-title">离线缓存</span>
+	</div>
+	<ul id="offul">
+		
+	</ul>
+</div>			
+</script>	
+	</div>
+	<div id="loading"><img src="images/loading-sub.gif" />加载中...</div>
+</body>
+</html>

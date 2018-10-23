@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>tmbUPMRSA(UPM加解密)</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+                <meta http-equiv="Access-Control-Allow-Origin" content="*">
+                    <style type="text/css">
+                        div,input {
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                        }
+                    </style>
+                    <script>
+                        var reqUrl = "http://test.itf.upm.wasu.tv/um";
+                        var payUrl = "http://test.itf.upm.wasu.tv/p";
+                        var iEncryptV,DevId,strToken,strUserKey,iMEI,strMAC,cmsOrderKey,payOrderKey;
+                        var secretkeyJson = '{"PublicKey" : "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB", "PrivateKey" : "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALohuERMC6ls2jZB21JN49xjnIeLuGxgQZxECcGrplSAwJUxDaDXnGBdf7LozTs5Bqcw3ipKltw9zWP83T6qPdGzar8m7rGdH8oVofQsZJwr1dir0Wiv51ZbiyICEHPZoWJWdkWq7FXVlFEUNAyAVQ9NPrT87xABBetu7uMUQWK3AgMBAAECgYEAhYZHEAeVnhcOeznHQkXKHoH++mXLCUQMDTPp49tlWN18SgqEgkvqTF8Giqvi/ocsNKgj2CbmDlzviLkPZjLuYNM9xArSuRKAbAcJ4i2fEpwc7z/6NUxJp3WkrIHn3fqcg5mp79fFFHRxxLd6RsDaDZe5X5rO8MzrktRfKhVFDuECQQD3MAnojvk+RSg3dNpHc2pJJ4rLR9jId5nz3rmALdcs6qEUAJKXnMgI7xhekaCEpqdmojZshx9qd08vsZxXx0OPAkEAwMR0DPiT+qeK7L97oJDKwhESjWGkV7M8Ya7blTEZfJNkibqYPj8Y6mWM0elOVVkkiMC4LFTXGDGsWqwYIku6WQJAc7tOKFAoafs/JRfUyvdCoBWfaiWtXc6BiiiReW38/M6ttAvAlrOVBHnNUxmjqffNEMSJ7q4lC1fo/0+M/5wQCQJAA6BukoPmvNOEIJolqEqxFd+eWryYi/HaU/gnN3JaCWb4gELbdGhZfqd0c8qQ57gqoMwHawYZmeHtXTNZrOOB2QJADQKIAaD5Qqa9jL8Ph0EaW0HJ9Aa1Ruq2DTIP4s/HH2JOE2M+qcgPqBQA1PUEaDtErUDJiXlqVfTa9K/6JRql2g==","PartnerID" : "2088211220027902","SellerID" : "qianli@chanlytech.com"}';
+                        
+                    window.tmbOnload = function(){
+                        tmbDevice.cbGetInfo=function(opCode,dataType,data){
+                            var device = eval('('+data+')');
+                            var IMEI =  device.imei;
+                            var MAC = device.MAC;
+    
+                            if(IMEI!=null&&IMEI.length>0){
+                                iMEI = IMEI;
+                                var jsonHeader = '{"Msg" : "1101001","V" : "0"}';
+                                var jsonBody = '{"device" : "iPhone6", "tvId" : "'+iMEI+'", "cpuSerial" : "'+iMEI+'"}';
+                                tmbUPMRSA.cbUPMServerInterface = cbDeviceRegister;
+                                tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                            }
+                            if(MAC!=null&&MAC.length>0){
+                                strMAC = MAC;
+                            }
+                        }
+                        tmbDevice.getInfo('10');
+                        tmbDevice.getInfo('23');
+                        tmbAliPay.setAlipaySecretKey(secretkeyJson);
+                    }
+                    
+                        // 支付平台类型
+                        var platformType = 1;
+                        // 获取支付平台
+                        function setPayType() {
+                            var type = document.getElementById("payType").value;
+                            platformType = Number(type);
+                        }
+                    
+                        function stringToJson(stringValue) {
+                            eval("var theJsonValue = "+stringValue);
+                            return theJsonValue;
+                        }
+                        function cbDeviceLogin(data) {
+                            var jsonValue = stringToJson(data);
+                            var strPublicInfo = '{"keyBits" : 512, "publicKey" : "'+jsonValue.publicKey+'"}';
+                            iEncryptV = jsonValue.encryptV;
+                            tmbUPMRSA.setRSAPublicKey(strPublicInfo);
+                            tmbWindow.alert(jsonValue.description);
+                        }
+                        function cbDeviceRegister(data) {
+                            var jsonValue = stringToJson(data);
+                            DevId = jsonValue.deviceId;
+                        }
+                        function cbPhoneRegister(data) {
+                            var jsonValue = stringToJson(data);
+                            strToken = jsonValue.token;
+                            strUserKey = jsonValue.userKey;
+                            tmbWindow.alert(jsonValue.description);
+                        }
+                        function cbPhoneLogin(data) {
+                            var jsonValue = stringToJson(data);
+                            strToken = jsonValue.token;
+                            strUserKey = jsonValue.userKey;
+                            tmbWindow.alert(jsonValue.description);
+                        }
+                        function setRSAPubilc(){
+                            tmbUPMRSA.setRSAPublicKey(secretkeyJson);
+                        }
+
+                        function deviceRegister() {
+                            var jsonHeader = '{"Msg" : "1101001","V" : "0"}';
+                            var jsonBody = '{"device" : "iPhone6", "tvId" : "'+iMEI+'", "cpuSerial" : "'+iMEI+'"}';
+                            tmbUPMRSA.cbUPMServerInterface = cbDeviceRegister;
+                            tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                        }
+                        function deviceLogin() {
+                            var jsonHeader = '{"Msg" : "1101002","V" : "0"}';
+                            var jsonBody = '{"tvId" : "'+iMEI+'","mac" : "'+strMAC+'","siteId" : 0,"deviceId" : "'+DevId+'"}';
+                            tmbUPMRSA.cbUPMServerInterface = cbDeviceLogin;
+                            tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                        }
+                        function phoneRegister() {
+                            var phoneNumber = document.getElementById("loginPhonenumber").value;
+                            var password = document.getElementById("loginPassword").value;
+                            var checkSum = document.getElementById("smsChecksum").value;
+                            
+                            var jsonHeader = '{"Msg" : "1101004","V" : "'+iEncryptV+'"}';
+                            var jsonBody = '{"phone" : "'+phoneNumber+'" , "tvId" : "'+iMEI+'", "deviceId" : "'+DevId+'", "passwd" : "'+password+'", "verifyCode" : "'+checkSum+'", "mac" : "'+strMAC+'", "siteId" : 0}';
+                            
+                            tmbUPMRSA.cbUPMServerInterface = cbPhoneRegister;
+                            tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                        }
+                        function phoneLogin() {
+                            var phoneNumber = document.getElementById("loginPhonenumber").value;
+                            var password = document.getElementById("loginPassword").value;
+                            var jsonHeader = '{"Msg" : "1102005","V" : "'+iEncryptV+'"}';
+                            var jsonBody = '{"phone" : "'+phoneNumber+'", "tvId" : "'+iMEI+'", "deviceId" : "'+DevId+'", "passwd" : "'+password+'", "mac" : "'+strMAC+'"}';
+                            tmbUPMRSA.cbUPMServerInterface = cbPhoneLogin;
+                            tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                        }
+                        function cbGetCheckSum(data) {
+                            var jsonValue = stringToJson(data);
+                            tmbWindow.alert(jsonValue);
+                        }
+                        function getCheckSum() {
+                            var phoneNumber = document.getElementById("loginPhonenumber").value;
+                            var jsonHeader = '{"Msg" : "1101003","V" : "'+iEncryptV+'"}';
+                        
+                            var jsonBody = '{"phone" : "'+phoneNumber+'" , "tvId" : "'+iMEI+'", "deviceId" : "'+DevId+'", "type" : 0}';
+                            tmbUPMRSA.cbUPMServerInterface = cbGetCheckSum;
+                            tmbUPMRSA.UPMServerInterface(reqUrl,jsonHeader,jsonBody);
+                        }
+                        function cbGetTradeNo(data) {
+                            tmbAliPay.setAlipaySecretKey(secretkeyJson);
+                            var jsonValue = stringToJson(data);
+                            payOrderKey = jsonValue.payOrderKey;
+                            cmsOrderKey = jsonValue.cmsOrderKey;
+                            var result = payOrderKey + cmsOrderKey;
+                            tmbWindow.alert(result);
+                        }
+                        function getTradeNo() {
+                            var siteId = Math.floor(Math.random()*100000+1);
+                            var jsonHeader = '{"Msg" : "1104019","V" : "'+iEncryptV+'"}';
+                            var jsonBody = '{"channel" : '+platformType+', "optType" : "GodBuy", "tvId" : "'+iMEI+'", "deviceId" : "'+DevId+'", "planBizId" : "40414189714680000002551", "resourceName" : "富士康大包月", "siteId" : '+siteId+', "price" : 1, "userkey" : "'+strUserKey+'", "token" : "'+strToken+'"}';
+                            tmbUPMRSA.cbUPMServerInterface = cbGetTradeNo;
+                            tmbUPMRSA.UPMServerInterface(payUrl,jsonHeader,jsonBody);
+                        }
+                        function cbAlipay(data) {
+                            tmbWindow.alert("支付宝支付完成:" + data);
+                        }
+                        function cbWepay(data) {
+                            tmbWindow.alert("微信支付完成retcode:" + data);
+                        }
+                        function pay() {
+                            switch(platformType) {
+                                case 1:
+                                    alipay();
+                                    break;
+                                case 2:
+                                    wechatpay();
+                                    break;
+                                default:
+                                    tmbWindow.alert("未有该支付平台");
+                                    break;
+                            }
+                        }
+                        function alipay() {
+                            var orderJson = '{"totalFee" : "1.0", "tradeNo" : "'+payOrderKey+'", "traceId":"'+cmsOrderKey+'", "subject" : "产品包订购", "body" : "富士康大包月", "notifyUrl" : "http://test.itf.upm.wasu.tv/third-interface/alipay/callback.do", "payTimeout" : "15m", "isSandMode" : "0", "showUrl" : "http://TMDM.temobi.com"}';
+                            tmbAliPay.onResult = cbAlipay;
+                            tmbAliPay.pay(orderJson);
+                        }
+                        function wechatpay() {
+                            var orderJson = '{"totalFee" : "1", "tradeNo" : "'+payOrderKey+'", "traceId":"'+cmsOrderKey+'", "subject" : "产品包订购", "body" : "富士康大包月", "notifyUrl" : "http://test.itf.upm.wasu.tv/third-interface/wx/callback.do", "payTimeout" : "15m", "isSandMode" : "0", "showUrl" : "http://TMDM.temobi.com"}';
+                            tmbWePay.onResult = cbWepay;
+                            tmbWePay.pay(orderJson);
+                        }
+                        function cbQueryTradeNo(data) {
+                            var jsonValue = stringToJson(data);
+                            var result = jsonValue.description + jsonValue.resourceName;
+                            tmbWindow.alert(result);
+                        }
+                        function queryTradeNo() {
+                            var jsonHeader = '{"Msg" : "1104016","V" : "'+iEncryptV+'"}';
+                            var jsonBody = '{"indentBizId" : "'+cmsOrderKey+'", "deviceId" : "'+DevId+'"}';
+                            tmbUPMRSA.cbUPMServerInterface = cbQueryTradeNo;
+                            tmbUPMRSA.UPMServerInterface(payUrl,jsonHeader,jsonBody);
+                        }
+                    </script>
+    </head>
+    <body style="margin-top:20px">
+        <div style="margin-top: 10px">
+            <a href="index.html">GoBack</a>
+        </div>
+        <h2>tmbUPMRSA(UPM加解密)</h2>
+        <span>输入登陆手机号</span><br>
+        <input type="text" value="18682651980" style="width:300px;height: 30px" id="loginPhonenumber" />
+        <br />
+        <span>输入校验码</span><br>
+        <input type="text" value="输入校验码" style="width:100px;height: 30px" id="smsChecksum" />
+        <input type="button" value="获取校验码" style="height: 30px" onclick="getCheckSum();" />
+        <br />
+        <span>输入登陆密码</span><br>
+        <input type="password" value="123456789" style="width:300px;height: 30px" id="loginPassword" />
+        <br />
+        <input type="button" value="设备登陆" style="height: 30px;margin-left:50px" onclick="deviceLogin();" />
+        <br />
+        <input type="button" value="手机号注册" style="height: 30px;margin-left:50px" onclick="phoneRegister();" />
+        <input type="button" value="手机号登陆" style="height: 30px;margin-left:50px" onclick="phoneLogin();" />
+        <br />
+        <div>
+            支付方式： <select id="payType" onchange="setPayType();">
+                <option value="1">支付宝支付</option>
+                <option value="2">微信支付</option>
+            </select> (数字1-2)
+        </div>
+        <input type="button" value="生成订单" style="height: 30px;margin-left:50px" onclick="getTradeNo();" />
+        <input type="button" value="订单查询" style="height: 30px;margin-left:50px" onclick="queryTradeNo();" />
+        <br />
+        <input type="button" value="确定支付" style="height: 30px;margin-left:50px" onclick="pay();" />
+        <br />
+        <br />
+        <br />
+    </body>
+</html>

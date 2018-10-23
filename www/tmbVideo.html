@@ -1,0 +1,46 @@
+<html lang="en" xmlns:ext="http://www.sencha.com/docs">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>MDM API Demo</title>
+    </head>
+        <script type="text/javascript">
+            //直接拨号
+            function startRecord() {
+                tmbVideo.startRecord();
+                //回调返回视频文件路径
+                tmbVideo.cbRecord = function(opCode, dataType, data) {
+                    document.getElementById('endpath').innerHTML = data;
+                }
+            }
+
+        //播放本地视频
+        function play() {
+            var path = document.getElementById('pickpath').innerHTML;
+            tmbVideo.play(path);
+        }
+        
+        function pick(){
+            tmbVideo.pick();
+            //选择视频回调
+            tmbVideo.cbPick = function(opCode, dataType, data) {
+                document.getElementById('pickpath').innerHTML = data;
+            }
+        }
+        
+        </script>
+        <body scroll="yes" id="docs" style="margin-top:20px">
+            <div>
+                <a href="index.html" onclick="stop();">GoBack</a>
+            </div>
+            <h2>视频录播（tmbVideo）</h2>
+            <input type="button" value="开始录像" onclick="startRecord();">
+                <div>录像成功返回视频文件路径:</div>
+                <div id="endpath" style="height: 50px"></div>
+                <input type="button" value="视频选择" onclick="pick();">
+                    <br/>
+                    <div>选择成功的视频文件路径:</div>
+                    <div id="pickpath" style="height: 50px"></div>
+                    <input type="button" value="视频播放" onclick="play();">
+                        <br/>
+                        </body>
+</html>
